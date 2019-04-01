@@ -14,26 +14,27 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity" />
-        <activity android:name=".GetStarted">
-
-        </activity>
+        <activity android:name=".GetStarted" />
         <activity android:name=".Entermobile" />
         <activity android:name=".Dashpage" />
         <activity
             android:name=".Main2Activity"
             android:label="@string/title_activity_main2"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme" />
+        <activity android:name=".SubCategory" />
+        <activity android:name=".BusinessLists" />
+        <activity android:name=".SampleDataUpload" />
+        <activity android:name=".Details"></activity>
+        <activity android:name=".Details2">
+
+        </activity>
+        <activity android:name=".SplashScreen">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
-        </activity>
-        <activity android:name=".SubCategory" />
-        <activity android:name=".BusinessLists" />
-        <activity android:name=".SampleDataUpload">
-
         </activity>
     </application>
 

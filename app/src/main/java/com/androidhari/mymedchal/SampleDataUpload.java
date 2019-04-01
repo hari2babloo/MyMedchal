@@ -22,12 +22,12 @@ import Classess.SubCategoryModel;
 
 public class SampleDataUpload extends AppCompatActivity {
 
-    FirebaseDatabase database;
+    DatabaseReference mDatabase;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sample_data_upload);
-
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 //getvalue();
 postvalue();
 
@@ -46,39 +46,135 @@ postvalue();
 
 //  Category
 
+//        DatabaseReference myRef = database.getReference("Category");
+//        CategoryModel category = new CategoryModel();
+//        category.setName("Shopping");
+//        category.setImg("imgs");
+//        category.setDesc("Description");
+//        category.setStar("value");
+//        category.setData("data");
+//        myRef.push().setValue(category);
 
-        DatabaseReference myRef = database.getReference("Locations").child("Pochampally").child("Shoppings");
-        CategoryModel category = new CategoryModel();
 
-        category.setName("Shoppings");
+
+////        SubCategory List
+//
+//
+        DatabaseReference myRef = database.getReference("SubCategory");
+        SubCategoryModel category = new SubCategoryModel();
+
+        category.setName("Mobiles");
         category.setImg("imgs");
         category.setDesc("Description");
         category.setStar("value");
         category.setData("null");
+        category.setCategory("Shopping");
+        myRef.push().setValue(category);
 
-        myRef.setValue(category);
+        category.setName("Electronics");
+        category.setImg("imgs");
+        category.setDesc("Description");
+        category.setStar("value");
+        category.setData("null");
+        category.setCategory("Shopping");
+        myRef.push().setValue(category);
+
+        category.setName("Clothing");
+        category.setImg("imgs");
+        category.setDesc("Description");
+        category.setStar("value");
+        category.setData("null");
+        category.setCategory("Shopping");
+        myRef.push().setValue(category);
+
+        category.setName("Home Appliances");
+        category.setImg("imgs");
+        category.setDesc("Description");
+        category.setStar("value");
+        category.setData("null");
+        category.setCategory("Shopping");
+        myRef.push().setValue(category);
+
+        category.setName("Jewellery");
+        category.setImg("imgs");
+        category.setDesc("Description");
+        category.setStar("value");
+        category.setData("null");
+        category.setCategory("Shopping");
+        myRef.push().setValue(category);
+
+        category.setName("Artificial Jewellery");
+        category.setImg("imgs");
+        category.setDesc("Description");
+        category.setStar("value");
+        category.setData("null");
+        category.setCategory("Shopping");
+        myRef.push().setValue(category);
 
 
+        category.setName("Family");
+        category.setImg("imgs");
+        category.setDesc("Description");
+        category.setStar("value");
+        category.setData("null");
+            category.setCategory("Food");
+        myRef.push().setValue(category);
+
+        category.setName("Vegetarian");
+        category.setImg("imgs");
+        category.setDesc("Description");
+        category.setStar("value");
+        category.setData("null");
+        category.setCategory("Food");
+        myRef.push().setValue(category);
+
+        category.setName("Non-Vegetarian");
+        category.setImg("imgs");
+        category.setDesc("Description");
+        category.setStar("value");
+        category.setData("null");
+        category.setCategory("Food");
+        myRef.push().setValue(category);
+
+        category.setName("Tiffins");
+        category.setImg("imgs");
+        category.setDesc("Description");
+        category.setStar("value");
+        category.setData("null");
+        category.setCategory("Food");
+        myRef.push().setValue(category);
+
+        category.setName("Meals");
+        category.setImg("imgs");
+        category.setDesc("Description");
+        category.setStar("value");
+        category.setData("null");
+        category.setCategory("Food");
+        myRef.push().setValue(category);
+
+        category.setName("Dhaba");
+        category.setImg("imgs");
+        category.setDesc("Description");
+        category.setStar("value");
+        category.setData("null");
+        category.setCategory("Food");
+        myRef.push().setValue(category);
+
+        category.setName("Sweets");
+        category.setImg("imgs");
+        category.setDesc("Description");
+        category.setStar("value");
+        category.setData("null");
+        category.setCategory("Food");
+        myRef.push().setValue(category);
 
 
-//        SubCategory List
-
-
-//        DatabaseReference myRef = database.getReference("Locations").child("Athvelly").child("Shoppings").child("Clothing");
-//        SubCategoryModel category = new SubCategoryModel();
-//
-//        category.setName("Shoppings");
-//        category.setImg("imgs");
-//        category.setDesc("Description");
-//        category.setStar("value");
-//        category.setData("null");
-//        myRef.setValue(category);
 
 
 
 //       ListDetails
-
-//        DatabaseReference myRef = database.getReference("Locations").child("Athvelly").child("Shoppings").child("Clothing").child("Android Hari");
+//
+//        DatabaseReference myRef = database.getReference("Business").child("8125110147");
 //
 //
 //        DetailsModel detailsModel   = new DetailsModel();
@@ -99,6 +195,8 @@ postvalue();
 //        detailsModel.setVideo("ytvideo");
 //        detailsModel.setRating("Good");
 //        detailsModel.setLikes("34");
+//        detailsModel.setCategory("Hospitals");
+//        detailsModel.setSubcategory("Dental");
 //
 //        myRef.setValue(detailsModel);
 
@@ -198,31 +296,35 @@ postvalue();
 
   //      myRef.setValue(signup);
 
-        myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
-
-
-                    String ss = postSnapshot.getValue().toString();
-                    String ss3 = postSnapshot.child("Children").getKey();
-                    Log.e("Data",ss);
-                    Log.e("Data2",ss3);
-                    // TODO: handle the post
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+//        FirebaseDatabase database2 = FirebaseDatabase.getInstance();
+////
+//        DatabaseReference myRef = database2.getReference("Athvelly").child("Hospitals");
+//
+//        myRef.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//
+//                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+//
+//
+//                    String ss = postSnapshot.getKey().toString();
+////                    String ss3 = postSnapshot.child(ss).getValue().toString();
+//                    Log.e("Data",ss);
+//  //                  Log.e("Data2",ss3);
+//                    // TODO: handle the post
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
     }
 
     private void getvalue() {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("locations").child("Athvelly").child("Shopping").child("Clothing");
+
+        DatabaseReference myRef = mDatabase.child("locations").child("Athvelly").child("Hospitals");
 
         myRef.addValueEventListener(new ValueEventListener() {
             @Override

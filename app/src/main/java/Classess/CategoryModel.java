@@ -46,8 +46,12 @@ public class CategoryModel
         this.data = data;
     }
 
+    public CategoryModel() {
+
+    }
 
     public String getStar() {
+
         return star;
     }
 

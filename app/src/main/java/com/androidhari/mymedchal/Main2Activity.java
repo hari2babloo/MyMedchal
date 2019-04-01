@@ -32,6 +32,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,12 +46,14 @@ public class Main2Activity extends AppCompatActivity
 
     List<String> items = new ArrayList<String>();
     List<String> categories = new ArrayList<String>();
+    List<String> categoriesimg = new ArrayList<String>();
+    List<CategoryModel> categoryModels = new ArrayList<>();
     FirebaseAuth mAuth;
     DatabaseReference ddd;
     DatabaseReference rootRef;
     FirebaseAuth.AuthStateListener mAuthListener;
     Spinner spinner;
-    String spinnerlocation;
+    String spinnerlocation,datasnapshot;
     ProgressDialog pd;
     GridView grid;
     Integer[] imageId;
@@ -85,10 +88,11 @@ public class Main2Activity extends AppCompatActivity
 
         DatabaseReference sss = rootRef.child("Locations");
 
-        sss.addListenerForSingleValueEvent(new ValueEventListener() {
+        sss.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Log.e("keys",dataSnapshot.toString());
+
 
                 for(DataSnapshot ds : dataSnapshot.getChildren()) {
                     String eventID = ds.getKey();
@@ -154,7 +158,7 @@ public class Main2Activity extends AppCompatActivity
 
     private void getgriddata() {
 
-        ddd = FirebaseDatabase.getInstance().getReference().child("Locations").child(spinnerlocation);
+        ddd = FirebaseDatabase.getInstance().getReference().child("Category");
 
 
 
@@ -173,8 +177,9 @@ public class Main2Activity extends AppCompatActivity
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                Log.e("Count " ,""+dataSnapshot
-                        .getChildrenCount());
+
+                Log.e("Count " ,""+dataSnapshot.toString());
+                datasnapshot = dataSnapshot.toString();
                 for(DataSnapshot ds : dataSnapshot.getChildren()) {
 
 
@@ -182,12 +187,16 @@ public class Main2Activity extends AppCompatActivity
                     //  String eventID= dataSnapshot.child("Hospitals").getKey();
                     String eventID = ds.getKey();
                     CategoryModel post = ds.getValue(CategoryModel.class);
-                    Log.e("Get Data", post.getName());
-                    categories.add(eventID);
+                    Log.e("Get Data", ds.getValue().toString());
+
+                    categories.add(post.getName());
+                    categoriesimg.add(post.getImg());
                     Log.d("TAG", eventID);
 
 
                 }
+
+
                 Log.d("ARAY", String.valueOf(categories));
                 Log.e("received", String.valueOf(categories));
 
@@ -209,7 +218,7 @@ public class Main2Activity extends AppCompatActivity
     }
 
     private void bindgriddata() {
-        GridAdapter adapter2 = new GridAdapter(this, categories, imageId);
+        GridAdapter adapter2 = new GridAdapter(this, categories, categoriesimg);
         grid.setAdapter(adapter2);
 
         grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -219,6 +228,10 @@ public class Main2Activity extends AppCompatActivity
                                     int position, long id) {
 
                 Toast.makeText(Main2Activity.this, categories.get(position), Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(Main2Activity.this, SubCategory.class);
+                intent.putExtra("datasnapshot", datasnapshot);
+                startActivity(intent);
                 // startActivity(new Intent(Main2Activity.this,SubCategory.class));
                 //Toast.makeText(this, "You Clicked at " +categories.get(position), Toast.LENGTH_SHORT).show();
 

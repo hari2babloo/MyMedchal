@@ -9,6 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.androidhari.mymedchal.R;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.List;
 
@@ -19,11 +21,11 @@ import java.util.List;
 public class GridAdapter extends BaseAdapter {
     private Context mContext;
     private final String[] web;
-    private final Integer[] Imageid;
+    private final String[] Imageid;
 
-    public GridAdapter(Context c, List<String> web, Integer[] Imageid ) {
+    public GridAdapter(Context c, List<String> web, List<String> Imageid ) {
         mContext = c;
-        this.Imageid = Imageid;
+        this.Imageid = Imageid.toArray(new String[0]);
         this.web = web.toArray(new String[0]);
     }
 
@@ -59,7 +61,9 @@ public class GridAdapter extends BaseAdapter {
             TextView textView = (TextView) grid.findViewById(R.id.text);
             ImageView imageView = (ImageView)grid.findViewById(R.id.picture);
             textView.setText(web[position]);
-            imageView.setImageResource(Imageid[position]);
+            //imageView.setImageResource(R.drawable.common_full_open_on_phone);
+            Glide.with(mContext).load(Imageid[position]).diskCacheStrategy(DiskCacheStrategy.DATA).into(imageView);
+
         } else {
             grid = (View) convertView;
         }

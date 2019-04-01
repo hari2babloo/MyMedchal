@@ -6,4 +6,5 @@
     <color name="grey_300">#A0A0A0</color>
     <color name="grey_100">#ffffff</color>
     <color name="whiteText">#FFFFFF</color>
+    <color name="white">#FFFFFF</color>
 </resources>

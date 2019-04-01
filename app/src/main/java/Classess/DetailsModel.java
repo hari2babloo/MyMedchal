@@ -31,8 +31,24 @@ public class DetailsModel {
     public String video;
     public String rating;
     public String likes;
+    public String subcategory;
+    public String category;
 
+    public String getSubcategory() {
+        return subcategory;
+    }
 
+    public void setSubcategory(String subcategory) {
+        this.subcategory = subcategory;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
 
     public String getAwards() {
 

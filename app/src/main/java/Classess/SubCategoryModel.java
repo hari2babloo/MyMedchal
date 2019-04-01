@@ -13,6 +13,19 @@ public class SubCategoryModel
     public String desc;
     public String data;
     public String star;
+    public String category;
+
+    public SubCategoryModel() {
+    }
+
+    public String getCategory() {
+
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
 
     public String getImg() {
         return img;
