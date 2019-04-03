@@ -15,6 +15,15 @@ public class DetailsModel {
     public String awards;
     public String address;
     public String description;
+    public String band;
+
+    public String getBand() {
+        return band;
+    }
+
+    public void setBand(String band) {
+        this.band = band;
+    }
 
     public String landmark;
     public String lane;
@@ -25,6 +34,7 @@ public class DetailsModel {
     public String lng;
     public String whatsapp;
     public String timingsfrom;
+    public String timingsto;
     public String website;
     public String workindays;
     public String img;
@@ -33,6 +43,22 @@ public class DetailsModel {
     public String likes;
     public String subcategory;
     public String category;
+    public String cost;
+    public String since;
+
+    public String getCost() {
+        return cost;
+    }
+    public String getTimingsto() {
+        return timingsto;
+    }
+
+    public void setTimingsto(String timingsto) {
+        this.timingsto = timingsto;
+    }
+    public void setCost(String cost) {
+        this.cost = cost;
+    }
 
     public String getSubcategory() {
         return subcategory;
@@ -44,6 +70,9 @@ public class DetailsModel {
 
     public String getCategory() {
         return category;
+    }
+
+    public DetailsModel() {
     }
 
     public void setCategory(String category) {
@@ -65,6 +94,14 @@ public class DetailsModel {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getSince() {
+        return since;
+    }
+
+    public void setSince(String since) {
+        this.since = since;
     }
 
     public String getWorkindays() {

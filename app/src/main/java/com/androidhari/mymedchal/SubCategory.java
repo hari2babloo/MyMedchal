@@ -16,6 +16,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.ChildEventListener;
@@ -115,15 +117,16 @@ mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
 
                 holder.setTitle(model.getName());
                 holder.setDesc(model.getDesc());
+                holder.setimg(model.getImg());
 //                holder.setImage(getBaseContext(), model.getImage());
 Log.e("result",model.getName());
                 holder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         final String url = model.getName();
-//                        Intent intent = new Intent(getApplicationContext(), NewsWebView.class);
-//                        intent.putExtra("id", url);
-//                        startActivity(intent);
+                        Intent intent = new Intent(getApplicationContext(), BusinessLists.class);
+                        intent.putExtra("id", url);
+                        startActivity(intent);
                         Log.e("ress", url);
                     }
                 });
@@ -133,7 +136,7 @@ Log.e("result",model.getName());
             public NewsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
                 View view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.cardviewtemplate, parent, false);
+                        .inflate(R.layout.cardviewsubcategory_template, parent, false);
 
                 return new NewsViewHolder(view);
             }
@@ -149,12 +152,19 @@ Log.e("result",model.getName());
 //
 //
 //
-    public static class NewsViewHolder extends RecyclerView.ViewHolder{
+    public class NewsViewHolder extends RecyclerView.ViewHolder{
         View mView;
         public NewsViewHolder(View itemView){
             super(itemView);
             mView = itemView;
         }
+
+        public void setimg(String img){
+
+            ImageView img2 = (ImageView)mView.findViewById(R.id.appImage);
+            Glide.with(SubCategory.this).load(img).diskCacheStrategy(DiskCacheStrategy.DATA).into(img2);
+        }
+
         public void setTitle(String title){
             TextView post_title = (TextView)mView.findViewById(R.id.text1);
             post_title.setText(title);

@@ -67,10 +67,11 @@ public class Main2Activity extends AppCompatActivity
 
         grid = (GridView)findViewById(R.id.grid);
         imageId = new Integer[]{R.drawable.common_full_open_on_phone,R.drawable.common_full_open_on_phone,R.drawable.common_full_open_on_phone,R.drawable.common_full_open_on_phone,R.drawable.common_full_open_on_phone,R.drawable.common_full_open_on_phone,R.drawable.common_full_open_on_phone,R.drawable.common_full_open_on_phone,R.drawable.common_full_open_on_phone, R.drawable.common_full_open_on_phone,R.drawable.common_full_open_on_phone};
+        items.add("Athvelly");
         pd=new ProgressDialog(this);
 
 
-
+    bindspinnerData();
 
      //   items.add("Hwllo");
 
@@ -197,7 +198,7 @@ public class Main2Activity extends AppCompatActivity
                 }
 
 
-                Log.d("ARAY", String.valueOf(categories));
+                Log.d("ARAY", String.valueOf(categoriesimg));
                 Log.e("received", String.valueOf(categories));
 
                 bindgriddata();

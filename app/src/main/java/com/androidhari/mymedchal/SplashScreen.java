@@ -1,7 +1,9 @@
 package com.androidhari.mymedchal;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -12,6 +14,8 @@ public class SplashScreen extends AppCompatActivity {
     ImageView bgapp, clover;
     LinearLayout textsplash, texthome, menus;
     Animation frombottom;
+
+    LinearLayout touch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,5 +37,15 @@ public class SplashScreen extends AppCompatActivity {
 
         texthome.startAnimation(frombottom);
         menus.startAnimation(frombottom);
+
+
+        touch = (LinearLayout)findViewById(R.id.menus);
+
+        menus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SplashScreen.this,GetStarted.class));
+            }
+        });
     }
 }

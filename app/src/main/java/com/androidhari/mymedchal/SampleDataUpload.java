@@ -60,113 +60,204 @@ postvalue();
 ////        SubCategory List
 //
 //
-        DatabaseReference myRef = database.getReference("SubCategory");
-        SubCategoryModel category = new SubCategoryModel();
-
-        category.setName("Mobiles");
-        category.setImg("imgs");
-        category.setDesc("Description");
-        category.setStar("value");
-        category.setData("null");
-        category.setCategory("Shopping");
-        myRef.push().setValue(category);
-
-        category.setName("Electronics");
-        category.setImg("imgs");
-        category.setDesc("Description");
-        category.setStar("value");
-        category.setData("null");
-        category.setCategory("Shopping");
-        myRef.push().setValue(category);
-
-        category.setName("Clothing");
-        category.setImg("imgs");
-        category.setDesc("Description");
-        category.setStar("value");
-        category.setData("null");
-        category.setCategory("Shopping");
-        myRef.push().setValue(category);
-
-        category.setName("Home Appliances");
-        category.setImg("imgs");
-        category.setDesc("Description");
-        category.setStar("value");
-        category.setData("null");
-        category.setCategory("Shopping");
-        myRef.push().setValue(category);
-
-        category.setName("Jewellery");
-        category.setImg("imgs");
-        category.setDesc("Description");
-        category.setStar("value");
-        category.setData("null");
-        category.setCategory("Shopping");
-        myRef.push().setValue(category);
-
-        category.setName("Artificial Jewellery");
-        category.setImg("imgs");
-        category.setDesc("Description");
-        category.setStar("value");
-        category.setData("null");
-        category.setCategory("Shopping");
-        myRef.push().setValue(category);
+//        DatabaseReference myRef = database.getReference("SubCategory");
+//        SubCategoryModel category = new SubCategoryModel();
+//
+//        category.setName("Home Appliances");
+//        category.setImg("imgs");
+//        category.setDesc("Description");
+//        category.setStar("value");
+//        category.setData("null");
+//        category.setCategory("Shopping");
+//        myRef.push().setValue(category);
 
 
-        category.setName("Family");
-        category.setImg("imgs");
-        category.setDesc("Description");
-        category.setStar("value");
-        category.setData("null");
-            category.setCategory("Food");
-        myRef.push().setValue(category);
+        //Details
+        DetailsModel detailsModel  = new DetailsModel();
+        DatabaseReference myRef = database.getReference().child("Dhaba");
 
-        category.setName("Vegetarian");
-        category.setImg("imgs");
-        category.setDesc("Description");
-        category.setStar("value");
-        category.setData("null");
-        category.setCategory("Food");
-        myRef.push().setValue(category);
 
-        category.setName("Non-Vegetarian");
-        category.setImg("imgs");
-        category.setDesc("Description");
-        category.setStar("value");
-        category.setData("null");
-        category.setCategory("Food");
-        myRef.push().setValue(category);
+        detailsModel.setName("MM Dhaba");
+        detailsModel.setPropname("hari");
+        detailsModel.setContact("1321");
+        detailsModel.setContact2("9856");
+        detailsModel.setContact3("756");
+        detailsModel.setEmail("Hari@gmail.com");
+        detailsModel.setAwards("BEst if best");
+        detailsModel.setAddress("Raghavendra Nagar");
+        detailsModel.setLocation("Athvelly");
+        detailsModel.setDescription("Best Mobile in market");
+        detailsModel.setLandmark("Water Tank");
+        detailsModel.setLane("raghavendra nagar");
+        detailsModel.setLat("0.0000");
+        detailsModel.setLng("0.0000");
+        detailsModel.setWhatsapp("9666");
+        detailsModel.setTimingsfrom("10:00 am");
+        detailsModel.setTimingsto("6:00 pm");
+        detailsModel.setWebsite("www.google.com");
+        detailsModel.setWorkindays("Mon-Fri");
+        detailsModel.setImg("imglink");
+        detailsModel.setVideo("Videolink");
+        detailsModel.setRating("9");
+        detailsModel.setSubcategory("Dhaba");
+        detailsModel.setCost("$$");
+        detailsModel.setCategory("Food");
+        detailsModel.setSince("1999");
+        detailsModel.setBand("Exclusive");
+        myRef.push().setValue(detailsModel);
 
-        category.setName("Tiffins");
-        category.setImg("imgs");
-        category.setDesc("Description");
-        category.setStar("value");
-        category.setData("null");
-        category.setCategory("Food");
-        myRef.push().setValue(category);
 
-        category.setName("Meals");
-        category.setImg("imgs");
-        category.setDesc("Description");
-        category.setStar("value");
-        category.setData("null");
-        category.setCategory("Food");
-        myRef.push().setValue(category);
+        detailsModel.setName("GA Dhaba");
+        detailsModel.setPropname("hari");
+        detailsModel.setContact("1321");
+        detailsModel.setContact2("9856");
+        detailsModel.setContact3("756");
+        detailsModel.setEmail("Hari@gmail.com");
+        detailsModel.setAwards("BEst if best");
+        detailsModel.setAddress("Raghavendra Nagar");
+        detailsModel.setLocation("Athvelly");
+        detailsModel.setDescription("Best Mobile in market");
+        detailsModel.setLandmark("Water Tank");
+        detailsModel.setLane("raghavendra nagar");
+        detailsModel.setLat("0.0000");
+        detailsModel.setLng("0.0000");
+        detailsModel.setWhatsapp("9666");
+        detailsModel.setTimingsfrom("10:00 am");
+        detailsModel.setTimingsto("6:00 pm");
+        detailsModel.setWebsite("www.google.com");
+        detailsModel.setWorkindays("Mon-Fri");
+        detailsModel.setImg("imglink");
+        detailsModel.setVideo("Videolink");
+        detailsModel.setRating("9");
+        detailsModel.setSubcategory("Dhaba");
+        detailsModel.setCost("$$");
+        detailsModel.setCategory("Food");
+        detailsModel.setBand("Exclusive");
+        detailsModel.setSince("1999");
 
-        category.setName("Dhaba");
-        category.setImg("imgs");
-        category.setDesc("Description");
-        category.setStar("value");
-        category.setData("null");
-        category.setCategory("Food");
-        myRef.push().setValue(category);
 
-        category.setName("Sweets");
-        category.setImg("imgs");
-        category.setDesc("Description");
-        category.setStar("value");
-        category.setData("null");
-        category.setCategory("Food");
-        myRef.push().setValue(category);
+        myRef.push().setValue(detailsModel);
+        detailsModel.setName("FB Dhaba");
+        detailsModel.setPropname("hari");
+        detailsModel.setContact("1321");
+        detailsModel.setContact2("9856");
+        detailsModel.setContact3("756");
+        detailsModel.setEmail("Hari@gmail.com");
+        detailsModel.setAwards("BEst if best");
+        detailsModel.setAddress("Raghavendra Nagar");
+        detailsModel.setLocation("Athvelly");
+        detailsModel.setDescription("Best Mobile in market");
+        detailsModel.setLandmark("Water Tank");
+        detailsModel.setLane("raghavendra nagar");
+        detailsModel.setLat("0.0000");
+        detailsModel.setLng("0.0000");
+        detailsModel.setWhatsapp("9666");
+        detailsModel.setTimingsfrom("10:00 am");
+        detailsModel.setTimingsto("6:00 pm");
+        detailsModel.setWebsite("www.google.com");
+        detailsModel.setWorkindays("Mon-Fri");
+        detailsModel.setImg("imglink");
+        detailsModel.setVideo("Videolink");
+        detailsModel.setRating("9");
+        detailsModel.setSubcategory("Dhaba");
+        detailsModel.setCost("$$");
+        detailsModel.setCategory("Food");
+        detailsModel.setBand("Exclusive");
+        detailsModel.setSince("1999");
+        myRef.push().setValue(detailsModel);
+
+
+        detailsModel.setName("AZ Dhaba");
+        detailsModel.setPropname("hari");
+        detailsModel.setContact("1321");
+        detailsModel.setContact2("9856");
+        detailsModel.setContact3("756");
+        detailsModel.setEmail("Hari@gmail.com");
+        detailsModel.setAwards("BEst if best");
+        detailsModel.setAddress("Raghavendra Nagar");
+        detailsModel.setLocation("Athvelly");
+        detailsModel.setDescription("Best Mobile in market");
+        detailsModel.setLandmark("Water Tank");
+        detailsModel.setLane("raghavendra nagar");
+        detailsModel.setLat("0.0000");
+        detailsModel.setLng("0.0000");
+        detailsModel.setWhatsapp("9666");
+        detailsModel.setBand("Exclusive");
+        detailsModel.setTimingsfrom("10:00 am");
+        detailsModel.setTimingsto("6:00 pm");
+        detailsModel.setWebsite("www.google.com");
+        detailsModel.setWorkindays("Mon-Fri");
+        detailsModel.setImg("imglink");
+        detailsModel.setVideo("Videolink");
+        detailsModel.setRating("9");
+        detailsModel.setSubcategory("Dhaba");
+        detailsModel.setCost("$$");
+        detailsModel.setCategory("Food");
+        detailsModel.setSince("1999");
+        myRef.push().setValue(detailsModel);
+
+        detailsModel.setName("AB Dhaba");
+        detailsModel.setPropname("hari");
+        detailsModel.setContact("1321");
+        detailsModel.setContact2("9856");
+        detailsModel.setContact3("756");
+        detailsModel.setEmail("Hari@gmail.com");
+        detailsModel.setAwards("BEst if best");
+        detailsModel.setAddress("Raghavendra Nagar");
+        detailsModel.setLocation("Athvelly");
+        detailsModel.setDescription("Best Mobile in market");
+        detailsModel.setLandmark("Water Tank");
+        detailsModel.setLane("raghavendra nagar");
+        detailsModel.setLat("0.0000");
+        detailsModel.setLng("0.0000");
+        detailsModel.setWhatsapp("9666");
+        detailsModel.setTimingsfrom("10:00 am");
+        detailsModel.setTimingsto("6:00 pm");
+        detailsModel.setWebsite("www.google.com");
+        detailsModel.setWorkindays("Mon-Fri");
+        detailsModel.setImg("imglink");
+        detailsModel.setVideo("Videolink");
+        detailsModel.setBand("Exclusive");
+        detailsModel.setRating("9");
+        detailsModel.setSubcategory("Dhaba");
+        detailsModel.setCost("$$");
+        detailsModel.setCategory("Food");
+        detailsModel.setSince("1999");
+        myRef.push().setValue(detailsModel);
+
+
+        detailsModel.setName("BC Dhaba");
+        detailsModel.setPropname("hari");
+        detailsModel.setContact("1321");
+        detailsModel.setContact2("9856");
+        detailsModel.setContact3("756");
+        detailsModel.setEmail("Hari@gmail.com");
+        detailsModel.setAwards("BEst if best");
+        detailsModel.setAddress("Raghavendra Nagar");
+        detailsModel.setLocation("Athvelly");
+        detailsModel.setDescription("Best Mobile in market");
+        detailsModel.setLandmark("Water Tank");
+        detailsModel.setLane("raghavendra nagar");
+        detailsModel.setLat("0.0000");
+        detailsModel.setLng("0.0000");
+        detailsModel.setWhatsapp("9666");
+        detailsModel.setTimingsfrom("10:00 am");
+        detailsModel.setTimingsto("6:00 pm");
+        detailsModel.setWebsite("www.google.com");
+        detailsModel.setWorkindays("Mon-Fri");
+        detailsModel.setImg("imglink");
+        detailsModel.setVideo("Videolink");
+        detailsModel.setRating("9");
+        detailsModel.setSubcategory("Dhaba");
+        detailsModel.setCost("$$");
+        detailsModel.setCategory("Food");
+        detailsModel.setSince("1999");
+        detailsModel.setBand("Exclusive");
+        myRef.push().setValue(detailsModel);
+
+
+
+
 
 
 
@@ -203,7 +294,7 @@ postvalue();
 
 //    Images
 //
-//        DatabaseReference myRef = database.getReference("Locations").child("Athvelly").child("Shoppings").child("Clothing").child("Android Hari").child("images").push();
+//        DatabaseReference myRef = database.getReference("Locations").child("Athvelly").child("Shoppings").child("Home Appliances").child("Android Hari").child("images").push();
 //
 //        MediaModel  mediaModel = new MediaModel();
 //
@@ -216,7 +307,7 @@ postvalue();
 //     Video
 
 //
-//        DatabaseReference myRef = database.getReference("Locations").child("Athvelly").child("Shoppings").child("Clothing").child("Android Hari").child("video").push();
+//        DatabaseReference myRef = database.getReference("Locations").child("Athvelly").child("Shoppings").child("Home Appliances").child("Android Hari").child("video").push();
 //
 //        MediaModel  mediaModel = new MediaModel();
 //
@@ -231,7 +322,7 @@ postvalue();
 
         //    Images
 
-//        DatabaseReference myRef = database.getReference("Locations").child("Athvelly").child("Shoppings").child("Clothing").child("Android Hari").child("comment").push();
+//        DatabaseReference myRef = database.getReference("Locations").child("Athvelly").child("Shoppings").child("Home Appliances").child("Android Hari").child("comment").push();
 //
 //
 //        CommentsModel commentsModel = new CommentsModel();
@@ -252,18 +343,18 @@ postvalue();
 //
 //myRef.child("82").child("images").setValue(detailsModel);
     //    myRef.setValue(subCategoryModel);
-//        DatabaseReference myRef2 = database.getReference("Locations").child("Athvelly").child("Shopping").child("Clothing").child("8125110150");;
-//        DatabaseReference myRef3 = database.getReference("Locations").child("Athvelly").child("Shopping").child("Clothing").child("8125110152");;
-//        DatabaseReference myRef4 = database.getReference("Locations").child("Athvelly").child("Shopping").child("Clothing").child("8125110151");;
-//        DatabaseReference myRef5 = database.getReference("Locations").child("Athvelly").child("Shopping").child("Clothing").child("8125110153");;
-//        DatabaseReference myRef6 = database.getReference("Locations").child("Athvelly").child("Shopping").child("Clothing").child("8125110154");;
-//        DatabaseReference myRef7 = database.getReference("Locations").child("Athvelly").child("Shopping").child("Clothing").child("8125110155");;
-//        DatabaseReference myRef8 = database.getReference("Locations").child("Athvelly").child("Shopping").child("Clothing").child("8125110156");;
-//        DatabaseReference myRef9 = database.getReference("Locations").child("Athvelly").child("Shopping").child("Clothing").child("8125110157");;
-//        DatabaseReference myRef0 = database.getReference("Locations").child("Athvelly").child("Shopping").child("Clothing").child("8125110158");;
-//        DatabaseReference myRef11 = database.getReference("Locations").child("Athvelly").child("Shopping").child("Clothing").child("8125110159");;
-//        DatabaseReference myRef22 = database.getReference("Locations").child("Athvelly").child("Shopping").child("Clothing").child("8125110160");;
-//        DatabaseReference myRef33 = database.getReference("Locations").child("Athvelly").child("Shopping").child("Clothing").child("8125110161");;
+//        DatabaseReference myRef2 = database.getReference("Locations").child("Athvelly").child("Shopping").child("Home Appliances").child("8125110150");;
+//        DatabaseReference myRef3 = database.getReference("Locations").child("Athvelly").child("Shopping").child("Home Appliances").child("8125110152");;
+//        DatabaseReference myRef4 = database.getReference("Locations").child("Athvelly").child("Shopping").child("Home Appliances").child("8125110151");;
+//        DatabaseReference myRef5 = database.getReference("Locations").child("Athvelly").child("Shopping").child("Home Appliances").child("8125110153");;
+//        DatabaseReference myRef6 = database.getReference("Locations").child("Athvelly").child("Shopping").child("Home Appliances").child("8125110154");;
+//        DatabaseReference myRef7 = database.getReference("Locations").child("Athvelly").child("Shopping").child("Home Appliances").child("8125110155");;
+//        DatabaseReference myRef8 = database.getReference("Locations").child("Athvelly").child("Shopping").child("Home Appliances").child("8125110156");;
+//        DatabaseReference myRef9 = database.getReference("Locations").child("Athvelly").child("Shopping").child("Home Appliances").child("8125110157");;
+//        DatabaseReference myRef0 = database.getReference("Locations").child("Athvelly").child("Shopping").child("Home Appliances").child("8125110158");;
+//        DatabaseReference myRef11 = database.getReference("Locations").child("Athvelly").child("Shopping").child("Home Appliances").child("8125110159");;
+//        DatabaseReference myRef22 = database.getReference("Locations").child("Athvelly").child("Shopping").child("Home Appliances").child("8125110160");;
+//        DatabaseReference myRef33 = database.getReference("Locations").child("Athvelly").child("Shopping").child("Home Appliances").child("8125110161");;
 //
 ////        myRef.setValue(signup);
 //

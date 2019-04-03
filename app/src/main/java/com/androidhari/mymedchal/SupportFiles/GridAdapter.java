@@ -60,6 +60,8 @@ public class GridAdapter extends BaseAdapter {
             grid = inflater.inflate(R.layout.gridtemplate, null);
             TextView textView = (TextView) grid.findViewById(R.id.text);
             ImageView imageView = (ImageView)grid.findViewById(R.id.picture);
+
+
             textView.setText(web[position]);
             //imageView.setImageResource(R.drawable.common_full_open_on_phone);
             Glide.with(mContext).load(Imageid[position]).diskCacheStrategy(DiskCacheStrategy.DATA).into(imageView);
