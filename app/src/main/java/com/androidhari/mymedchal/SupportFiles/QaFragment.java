@@ -1,7 +1,5 @@
 package com.androidhari.mymedchal.SupportFiles;
 
-import android.app.Dialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,14 +10,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.androidhari.mymedchal.BusinessLists;
-import com.androidhari.mymedchal.Details;
 import com.androidhari.mymedchal.R;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -31,78 +26,53 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import Classess.DetailsModel;
+import Classess.QAmodels;
 import Classess.Reviewmodels;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ReviewsFragment extends Fragment {
+public class QaFragment extends Fragment {
 
-    TextView stars,title,describe,timestamp,userid,username,img,nameofbusines,location;
-    RecyclerView  mRecycleView;
-    private FirebaseRecyclerAdapter<Reviewmodels, NewsViewHolder> mPeopleRVAdapter;
+
+    RecyclerView mRecycleView;
+    private FirebaseRecyclerAdapter<QAmodels, NewsViewHolder> mPeopleRVAdapter;
     DatabaseReference mDatabase;
-    TextView reviewtxt;
-    public ReviewsFragment() {
+
+
+    public QaFragment() {
         // Required empty public constructor
     }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        View v = inflater.inflate(R.layout.fragment_qa, container, false);
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_reviews, container, false);
-  //      stars = (TextView)v.findViewById(R.id.stars);
         mRecycleView = (RecyclerView)v.findViewById(R.id.recyclerview);
-        reviewtxt = (TextView)v.findViewById(R.id.review);
-
-        reviewtxt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Dialog dialog = new Dialog(getContext(),R.style.DialoTheme);
-
-                dialog.setContentView(R.layout.writereview);
-                dialog.setTitle("Title...");
-
-                // set the custom dialog components - text, image and button
-//                TextView text = (TextView) dialog.findViewById(R.id.text);
-//                text.setText("Android custom dialog example!");
-//                ImageView image = (ImageView) dialog.findViewById(R.id.image);
-//                image.setImageResource(R.drawable.bellcon);
-
-                Button dialogButton = (Button) dialog.findViewById(R.id.buttonok);
-                // if button is clicked, close the custom dialog
-                dialogButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                    }
-                });
-
-                dialog.show();
-            }
-
-        });
 
         mRecycleView.setHasFixedSize(true);
         mRecycleView.setLayoutManager(new LinearLayoutManager(getContext()));
-         mDatabase = FirebaseDatabase.getInstance().getReference().child("reviews");
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("Q&A");
         mDatabase.keepSynced(true);
         mDatabase.orderByChild("nameofbusiness").equalTo("GA Mobiles").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Log.e("data",dataSnapshot.toString());
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    Reviewmodels ss = ds.getValue(Reviewmodels.class);
+                    QAmodels ss = ds.getValue(QAmodels.class);
 
 //                    stars.setText(ss.getStars());
-                    Log.e("reviews", ss.getStars());
+                    Log.e("reviews", ss.getAns());
 
                 }
             }
@@ -113,17 +83,21 @@ public class ReviewsFragment extends Fragment {
         });
 
 
-        FirebaseRecyclerOptions personsOptions = new FirebaseRecyclerOptions.Builder<Reviewmodels>().setQuery(mDatabase,  Reviewmodels.class).build();
-        mPeopleRVAdapter = new FirebaseRecyclerAdapter<Reviewmodels, NewsViewHolder>(personsOptions) {
+        FirebaseRecyclerOptions personsOptions = new FirebaseRecyclerOptions.Builder<QAmodels>().setQuery(mDatabase,  QAmodels.class).build();
+
+
+        mPeopleRVAdapter = new FirebaseRecyclerAdapter<QAmodels, NewsViewHolder>(personsOptions) {
             @Override
-            protected void onBindViewHolder(NewsViewHolder holder, final int position, final Reviewmodels model) {
-                holder.post_title.setText(model.getStars());
-                holder.post_desc.setText(model.getDescription());
+            protected void onBindViewHolder(NewsViewHolder holder, final int position, final QAmodels model) {
+
+                holder.question.setText(model.getQuestion());
                 holder.username.setText(model.getUsername());
-                                holder.ratingBar.setRating(Float.parseFloat(model.getStars()));
-                Glide.with(getContext()).load(model.image).diskCacheStrategy(DiskCacheStrategy.DATA).into(holder.image);
+                holder.answer.setText(model.getAns());
+                Glide.with(getContext()).load(model.profilepic).diskCacheStrategy(DiskCacheStrategy.DATA).into(holder.usrimg);
+
 //                holder.setImage(getBaseContext(), model.getImage());
-                Log.e("result",model.getStars());
+                Log.e("result",model.getAns());
+
             }
 
             @Override
@@ -141,8 +115,9 @@ public class ReviewsFragment extends Fragment {
 
 
         return v;
-    }
 
+
+    }
 
     public static class NewsViewHolder extends RecyclerView.ViewHolder{
 
@@ -150,16 +125,15 @@ public class ReviewsFragment extends Fragment {
         ImageView usrimg,image;
         TextView username;
         RatingBar ratingBar;
-        TextView post_title;
-        TextView post_desc;
+        TextView question;
+        TextView answer;
         public NewsViewHolder(View itemView){
             super(itemView);
-             post_title = (TextView)itemView.findViewById(R.id.title);
-             post_desc = (TextView)itemView.findViewById(R.id.desc);
+            question = (TextView)itemView.findViewById(R.id.title);
+            answer = (TextView)itemView.findViewById(R.id.desc);
             username = (TextView)itemView.findViewById(R.id.username);
             usrimg  = (ImageView)itemView.findViewById(R.id.usrimg);
-            image  = (ImageView)itemView.findViewById(R.id.image);
-            ratingBar = (RatingBar)itemView.findViewById(R.id.stars);
+
 
 //            mView = itemView;
         }
@@ -179,4 +153,6 @@ public class ReviewsFragment extends Fragment {
         super.onStop();
         mPeopleRVAdapter.stopListening();
     }
+
+
 }

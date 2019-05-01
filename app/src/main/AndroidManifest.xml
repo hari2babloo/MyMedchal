@@ -13,7 +13,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity" />
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".GetStarted" />
         <activity android:name=".Entermobile" />
         <activity android:name=".Dashpage" />
@@ -25,17 +31,24 @@
 
         </activity>
         <activity android:name=".BusinessLists" />
-        <activity android:name=".SampleDataUpload"></activity>
-        <activity android:name=".Details" />
-        <activity android:name=".Details2"></activity>
-        <activity android:name=".SplashScreen">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+        <activity android:name=".SampleDataUpload">
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+        </activity>
+        <activity android:name=".Details">
+
+
+        </activity>
+        <activity android:name=".Details2">
+
+
+        </activity>
+        <activity android:name=".SplashScreen">
+
+
+
         </activity>
         <activity android:name=".Intro">
+
 
 
         </activity>

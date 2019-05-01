@@ -1,15 +1,116 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="droidmentor.tabwithviewpager.Fragment.CallsFragment">
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+
+    android:padding="10dp">
 
     <!-- TODO: Update blank fragment layout -->
+
+    <TextView
+        android:id="@+id/about"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:padding="10dp"
+
+        android:text="Quick Information"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:padding="5dp"
+        android:text="content" />
+
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="overview"
-        android:textSize="30sp" />
+        android:padding="10dp"
+        android:text="Services:"
+        android:textStyle="bold" />
 
-</RelativeLayout>
+    <TextView
+        android:id="@+id/serv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:padding="5dp"
+        android:text="content" />
+
+    <TextView
+        android:id="@+id/timing"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_circular_clock"
+        android:drawablePadding="10dp"
+        android:padding="5dp"
+        android:text="timings" />
+
+    <TextView
+        android:id="@+id/email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/email"
+        android:drawablePadding="10dp"
+        android:padding="5dp"
+        android:text="Email" />
+
+    <TextView
+        android:id="@+id/website"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_www"
+        android:drawablePadding="10dp"
+        android:padding="5dp"
+        android:text="Website" />
+
+    <TextView
+        android:id="@+id/workdays"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/workingdays"
+        android:drawablePadding="10dp"
+        android:padding="5dp"
+        android:text="Working Days" />
+
+    <TextView
+        android:id="@+id/addr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_location"
+        android:drawablePadding="10dp"
+        android:padding="5dp"
+        android:text="Address" />
+
+    <TextView
+        android:id="@+id/award"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_certificate"
+        android:drawablePadding="10dp"
+        android:padding="5dp"
+        android:text="Awards" />
+
+    <TextView
+        android:id="@+id/since"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:padding="5dp"
+        android:text="Since" />
+
+    <TextView
+        android:id="@+id/rate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:padding="5dp"
+        android:text="$$$" />
+
+
+</LinearLayout>

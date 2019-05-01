@@ -30,7 +30,11 @@ dependencies {
     implementation 'com.firebaseui:firebase-ui-auth:4.3.2'
 
     compile 'com.codemybrainsout.onboarding:onboarder:1.0.4'
+
+    implementation 'com.github.florent37:materialtextfield:1.0.7'
     compile 'com.synnapps:carouselview:0.1.5'
+
+    compile 'com.github.stfalcon:frescoimageviewer:0.5.0'
 
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.google.firebase:firebase-storage:11.0.4'

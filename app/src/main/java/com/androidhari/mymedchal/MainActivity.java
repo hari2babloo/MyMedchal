@@ -72,6 +72,7 @@ public class  MainActivity extends AppCompatActivity implements
 ProgressDialog pd;
     private static final String KEY_VERIFY_IN_PROGRESS = "key_verify_in_progress";
 String picturepath;
+String phonenumbrtxt;
     private static final int STATE_INITIALIZED = 1;
     private static final int STATE_CODE_SENT = 2;
     private static final int STATE_VERIFY_FAILED = 3;
@@ -150,6 +151,7 @@ String picturepath;
         top.setVisibility(View.GONE);
         mStatusText = findViewById(R.id.status);
         mDetailText = findViewById(R.id.detail);
+        mDetailText.setVisibility(View.GONE);
 
         mPhoneNumberField = findViewById(R.id.fieldPhoneNumber);
         mVerificationField = findViewById(R.id.fieldVerificationCode);
@@ -484,7 +486,8 @@ String picturepath;
 
 
 
-            mStatusText.setText(R.string.signed_in);
+            mStatusText.setText("One Last Step to Complete your Profile");
+
             mDetailText.setText(user.getUid());
             pd.setMessage("Gathering Previous Informations");
             pd.show();
@@ -583,7 +586,11 @@ String picturepath;
                     return;
                 }
 
-                startPhoneNumberVerification(mPhoneNumberField.getText().toString());
+
+                phonenumbrtxt = mPhoneNumberField.getText().toString();
+
+
+                startPhoneNumberVerification(phonenumbrtxt);
                 break;
             case R.id.buttonVerifyPhone:
                 String code = mVerificationField.getText().toString();
@@ -595,7 +602,7 @@ String picturepath;
                 verifyPhoneNumberWithCode(mVerificationId, code);
                 break;
             case R.id.buttonResend:
-                resendVerificationCode(mPhoneNumberField.getText().toString(), mResendToken);
+                resendVerificationCode(phonenumbrtxt, mResendToken);
                 break;
             case R.id.signOutButton:
                 signOut();
