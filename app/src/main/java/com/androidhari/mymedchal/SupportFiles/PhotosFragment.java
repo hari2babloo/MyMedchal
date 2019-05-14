@@ -2,22 +2,39 @@ package com.androidhari.mymedchal.SupportFiles;
 
 import android.animation.Animator;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.androidhari.mymedchal.Details;
 import com.androidhari.mymedchal.R;
@@ -25,18 +42,32 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import Classess.Photosmodel;
+import Classess.Reviewmodels;
+import Classess.TinyDB;
+
+import static android.app.Activity.RESULT_OK;
 
 
 /**
@@ -48,10 +79,15 @@ public class PhotosFragment extends Fragment {
     private FirebaseRecyclerAdapter<Photosmodel, NewsViewHolder> mPeopleRVAdapter;
     DatabaseReference mDatabase;
     DatabaseReference mDatabase2;
-
+    TextView addphoto;
     private AdapterFish Adapter;
     RecyclerView mRVFishPrice;
+    ImageView imageView;
+    TextView addimage;
+    String imageuploaded="none";
+    String picturepath;
     List<String> filterdata= new ArrayList<String>();
+    private static int RESULT_LOAD_IMAGE = 1;
 
 
     //getPickupDeliveryOrders data = new getPickupDeliveryOrders();
@@ -66,6 +102,8 @@ public class PhotosFragment extends Fragment {
 
     ImageView expandedImageView;
     LinearLayout container;
+    TinyDB  tinyDB;
+    ProgressDialog pd;
     private int shortAnimationDuration;
     public PhotosFragment() {
         // Required empty public constructor
@@ -85,16 +123,173 @@ public class PhotosFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_photos, container, false);
         //      stars = (TextView)v.findViewById(R.id.stars);
+        tinyDB = new TinyDB(getContext());
+        pd = new ProgressDialog(getContext());
         mRVFishPrice = (RecyclerView)v.findViewById(R.id.recyclerview);
         expandedImageView  = (ImageView)v.findViewById(R.id.expanded_image);
+        addphoto = (TextView)v.findViewById(R.id.addphoto);
         container = (LinearLayout)v.findViewById(R.id.container);
-        mRVFishPrice.setHasFixedSize(true);
-        mRVFishPrice.setLayoutManager(new GridLayoutManager(getContext(),3));
+        //mRVFishPrice.setHasFixedSize(true);
+       // mRVFishPrice.setLayoutManager(new GridLayoutManager(getContext(),3));
         mDatabase = FirebaseDatabase.getInstance().getReference().child("photos");
 
 
         mDatabase.keepSynced(true);
-        mDatabase.orderByKey().equalTo("-LbOhR4pW4FoDiSbQU5k").addChildEventListener(new ChildEventListener() {
+
+        addphoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Dialog dialog = new Dialog(getContext(),R.style.DialoTheme);
+
+                dialog.setContentView(R.layout.addphoto);
+                dialog.setTitle("Add Photos...");
+
+                imageView = (ImageView)dialog.findViewById(R.id.imageView);
+
+                        addimage = (TextView)dialog.findViewById(R.id.add);
+                final Button submit = (Button)dialog.findViewById(R.id.submit);
+
+
+                imageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        fetchimage();
+                    }
+                });
+                addimage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        fetchimage();
+                    }
+                });
+                submit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+
+                        View parentLayout = dialog.findViewById(R.id.parent);
+                         if (imageuploaded.equalsIgnoreCase("none")) {
+
+                            Snackbar.make(parentLayout, "You have not selected any Photo", Snackbar.LENGTH_LONG)
+                                    .setAction("CLOSE", new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+
+                                        }
+                                    })
+                                    .setActionTextColor(getResources().getColor(android.R.color.holo_red_light ))
+                                    .show();
+                            dialog.cancel();
+                        }
+                        else {
+
+
+
+
+                            pd.setMessage("Submitting your Image..");
+                            pd.setCancelable(false);
+                            pd.show();
+
+
+                            StorageReference storage = FirebaseStorage.getInstance().getReference();
+                            //   StorageReference storageRef = storage.getReference();
+
+//        StorageReference mountainsRef = storageRef.child("mountains.jpg");
+
+// Create a reference to 'images/mountains.jpg'
+                            final StorageReference mountainImagesRef = storage.child("photos/"+tinyDB.getString("key")+"/" +System.currentTimeMillis() +".jpg");
+
+// While the file names are the same, the references point to different files
+                            mountainImagesRef.getName().equals(mountainImagesRef.getName());    // true
+                            mountainImagesRef.getPath().equals(mountainImagesRef.getPath());    // false
+                            imageView.setDrawingCacheEnabled(true);
+                            imageView.buildDrawingCache();
+                            Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                            byte[] data = baos.toByteArray();
+
+                            UploadTask uploadTask = mountainImagesRef.putBytes(data);
+
+
+
+                            Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                                @Override
+                                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                                    if (!task.isSuccessful()) {
+                                        throw task.getException();
+                                    }
+
+                                    // Continue with the task to get the download URL
+                                    return mountainImagesRef.getDownloadUrl();
+                                }
+                            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Uri> task) {
+                                    if (task.isSuccessful()) {
+                                        Uri downloadUri = task.getResult();
+                                        Log.e("Status of Upload",task.getResult().toString());
+                                        imageuploaded = task.getResult().toString();
+
+                                        FirebaseDatabase database = FirebaseDatabase.getInstance();
+                                        DatabaseReference myRef = database.getReference("photos").child(tinyDB.getString("key"));
+                                        Photosmodel category = new Photosmodel();
+                                        category.setTimestanp(System.currentTimeMillis());
+                                        //category.setTitle("dfdsf");
+                                        category.setUserid(tinyDB.getString("uid"));
+                                        category.setUsername(tinyDB.getString("uname"));
+                                        category.setProfilepic(tinyDB.getString("uimage"));
+                                        category.setLocation(tinyDB.getString("location"));
+                                        category.setKey(tinyDB.getString("key"));
+                                        category.setImgurl(imageuploaded);
+                                        myRef.push().setValue(category);
+                                        pd.dismiss();
+                                        View parentLayout = dialog.findViewById(R.id.parent);
+                                        Snackbar.make(parentLayout, "Your Photo has been posted", Snackbar.LENGTH_LONG)
+                                                .setAction("CLOSE", new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View view) {
+
+                                                    }
+                                                })
+                                                .setActionTextColor(getResources().getColor(android.R.color.holo_red_light ))
+                                                .show();
+                                        dialog.cancel();
+                                    } else {
+                                        pd.dismiss();
+                                        dialog.cancel();
+                                        Toast.makeText(getContext(), "Please Try Again", Toast.LENGTH_SHORT).show();
+
+                                        // Handle failures
+                                        // ...
+                                    }
+                                }
+                            });
+                        }
+
+
+
+
+//                        validateandsubmitreview();
+
+                    }
+                });
+
+                Button dialogButton = (Button) dialog.findViewById(R.id.button2);
+                // if button is clicked, close the custom dialog
+                dialogButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+
+                dialog.show();
+            }
+        });
+
+
+        mDatabase.orderByKey().equalTo(tinyDB.getString("key")).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Log.e("photosdata",dataSnapshot.getKey());
@@ -230,14 +425,127 @@ public class PhotosFragment extends Fragment {
         return v;
     }
 
+    private void fetchimage() {
+
+        Intent i = new Intent(
+                Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+        startActivityForResult(i, RESULT_LOAD_IMAGE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
+            Uri selectedImage = data.getData();
+            String[] filePathColumn = { MediaStore.Images.Media.DATA };
+
+            Cursor cursor =  getActivity().getContentResolver().query(selectedImage,
+                    filePathColumn, null, null, null);
+            cursor.moveToFirst();
+
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            picturepath = cursor.getString(columnIndex);
+            cursor.close();
+
+            // ImageView imageView = (ImageView) findViewById(R.id.imgView);
+
+//           profileimg.setImageBitmap(BitmapFactory.decodeFile(picturepath));
+
+            Log.e("picturepath",picturepath);
+
+
+            decodefile(picturepath,800,800);
+
+        }
+
+
+    }
+
+
+    private String decodefile(String path, int DESIREDWIDTH , int DESIREDHEIGHT) {
+
+        imageuploaded   = null;
+        Bitmap scaledBitmap = null;
+
+        try {
+            // Part 1: Decode image
+            Bitmap unscaledBitmap = ScalingUtilities.decodeFile(path, DESIREDWIDTH, DESIREDHEIGHT, ScalingUtilities.ScalingLogic.FIT);
+
+            if (!(unscaledBitmap.getWidth() <= DESIREDWIDTH && unscaledBitmap.getHeight() <= DESIREDHEIGHT)) {
+                // Part 2: Scale image
+                scaledBitmap = ScalingUtilities.createScaledBitmap(unscaledBitmap, DESIREDWIDTH, DESIREDHEIGHT, ScalingUtilities.ScalingLogic.FIT);
+                //  profileimg.setImageBitmap( scaledBitmap);
+//                profileimg.setImageBitmap(BitmapFactory.decodeFile(strMyImagePath));
+            } else {
+                unscaledBitmap.recycle();
+                return path;
+            }
+
+            // Store to tmp file
+
+            String extr = Environment.getExternalStorageDirectory().toString();
+            File mFolder = new File(extr + "/TMMFOLDER");
+            if (!mFolder.exists()) {
+                mFolder.mkdir();
+            }
+
+            String s = "tmp.png";
+
+            File f = new File(mFolder.getAbsolutePath(), s);
+
+            imageuploaded = f.getAbsolutePath();
+            FileOutputStream fos = null;
+            try {
+                fos = new FileOutputStream(f);
+                scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 75, fos);
+                fos.flush();
+                fos.close();
+            } catch (FileNotFoundException e) {
+
+                e.printStackTrace();
+            } catch (Exception e) {
+
+                e.printStackTrace();
+            }
+
+            scaledBitmap.recycle();
+        } catch (Throwable e) {
+        }
+
+        if (imageuploaded == null) {
+            return path;
+        }
+
+//        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(400, 400);
+        imageView.setImageBitmap(BitmapFactory.decodeFile(imageuploaded));
+
+  //      imageView.setLayoutParams(layoutParams);
+        addimage.setVisibility(View.GONE);
+        return imageuploaded;
+
+
+    }
+
+
     private void DiplayDaata() {
 
         Adapter = new AdapterFish(getContext(), filterdata);
         Adapter.setHasStableIds(false);
-        mRVFishPrice.setAdapter(Adapter);
+
         mRVFishPrice.scrollToPosition(0);
-        mRVFishPrice.setHasFixedSize(false);
-        mRVFishPrice.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
+        mRVFishPrice.setHasFixedSize(true);
+
+//        mRVFishPrice.addItemDecoration(new DividerItemDecoration(getContext(),
+//                DividerItemDecoration.HORIZONTAL));
+//        mRVFishPrice.addItemDecoration(new DividerItemDecoration(getContext(),
+//                DividerItemDecoration.VERTICAL));
+        mRVFishPrice.setLayoutManager(new GridLayoutManager(getContext(),3));
+        mRVFishPrice.setAdapter(Adapter);
+        //  recyclerView.setAdapter(imageAdapter);
+       // mRVFishPrice.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
     }
 
 

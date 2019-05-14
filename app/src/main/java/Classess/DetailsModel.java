@@ -16,15 +16,22 @@ public class DetailsModel {
     public String address;
     public String description;
     public String band;
+    public String desc;
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
 
     public String getBand() {
         return band;
     }
-
     public void setBand(String band) {
         this.band = band;
     }
-
     public String landmark;
     public String lane;
     public String colony;
@@ -45,6 +52,16 @@ public class DetailsModel {
     public String category;
     public String cost;
     public String since;
+
+    public String key;
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
 
     public String getCost() {
         return cost;
@@ -282,5 +299,9 @@ public class DetailsModel {
         this.likes = likes;
     }
 
-
+    public DetailsModel(String name, String address, String img) {
+        this.name = name;
+        this.address = address;
+        this.img = img;
+    }
 }

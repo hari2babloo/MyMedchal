@@ -11,6 +11,9 @@ package com.androidhari.mymedchal;
  import android.net.Uri;
  import android.os.Build;
  import android.os.Bundle;
+
+ import com.google.android.gms.tasks.Continuation;
+ import com.google.firebase.storage.FirebaseStorage;
  import android.os.Environment;
  import android.provider.MediaStore;
  import android.support.annotation.NonNull;
@@ -18,6 +21,7 @@ package com.androidhari.mymedchal;
  import android.support.v4.app.ActivityCompat;
  import android.support.v4.content.ContextCompat;
  import android.support.v7.app.AppCompatActivity;
+ import android.support.v7.widget.CardView;
  import android.text.TextUtils;
  import android.util.Log;
  import android.view.View;
@@ -25,7 +29,6 @@ package com.androidhari.mymedchal;
  import android.widget.Button;
  import android.widget.EditText;
  import android.widget.ImageView;
- import android.widget.LinearLayout;
  import android.widget.RadioButton;
  import android.widget.RadioGroup;
  import android.widget.RelativeLayout;
@@ -34,8 +37,6 @@ package com.androidhari.mymedchal;
 
  import com.androidhari.mymedchal.SupportFiles.ScalingUtilities;
  import com.google.android.gms.tasks.OnCompleteListener;
- import com.google.android.gms.tasks.OnFailureListener;
- import com.google.android.gms.tasks.OnSuccessListener;
  import com.google.android.gms.tasks.Task;
         import com.google.firebase.FirebaseException;
         import com.google.firebase.FirebaseTooManyRequestsException;
@@ -50,7 +51,6 @@ package com.androidhari.mymedchal;
  import com.google.firebase.database.DatabaseReference;
  import com.google.firebase.database.FirebaseDatabase;
  import com.google.firebase.database.ValueEventListener;
- import com.google.firebase.storage.FirebaseStorage;
  import com.google.firebase.storage.StorageReference;
  import com.google.firebase.storage.UploadTask;
 
@@ -59,11 +59,10 @@ package com.androidhari.mymedchal;
  import java.io.File;
  import java.io.FileNotFoundException;
  import java.io.FileOutputStream;
- import java.util.HashMap;
- import java.util.Map;
  import java.util.concurrent.TimeUnit;
 
  import Classess.Signup;
+ import Classess.TinyDB;
 
 public class  MainActivity extends AppCompatActivity implements
         View.OnClickListener {
@@ -73,6 +72,7 @@ ProgressDialog pd;
     private static final String KEY_VERIFY_IN_PROGRESS = "key_verify_in_progress";
 String picturepath;
 String phonenumbrtxt;
+TinyDB tinyDB;
     private static final int STATE_INITIALIZED = 1;
     private static final int STATE_CODE_SENT = 2;
     private static final int STATE_VERIFY_FAILED = 3;
@@ -86,7 +86,7 @@ String phonenumbrtxt;
     // [END declare_auth]
     RelativeLayout bottom;
     String gendervalue;
-    LinearLayout top;
+   // LinearLayout top;
 
     private boolean mVerificationInProgress = false;
     private String mVerificationId;
@@ -101,7 +101,8 @@ String phonenumbrtxt;
 
     private EditText mPhoneNumberField;
     private EditText mVerificationField;
-
+    String phoneNumber;
+    CardView top;
     private Button mStartButton;
     private Button mVerifyButton;
     private Button mResendButton;
@@ -119,7 +120,7 @@ String phonenumbrtxt;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         pd= new ProgressDialog(MainActivity.this);
-
+        tinyDB = new TinyDB(this);
         if (Build.VERSION.SDK_INT >= 23)
         {
             if (checkPermission())
@@ -147,9 +148,9 @@ String phonenumbrtxt;
         mSignedInViews = findViewById(R.id.signedInButtons);
 
         bottom = (RelativeLayout)findViewById(R.id.bottom);
-        top = (LinearLayout)findViewById(R.id.toplayout);
+        top = (CardView)findViewById(R.id.card_view2);
         top.setVisibility(View.GONE);
-        mStatusText = findViewById(R.id.status);
+        mStatusText = findViewById(R.id.statusmsg);
         mDetailText = findViewById(R.id.detail);
         mDetailText.setVisibility(View.GONE);
 
@@ -424,7 +425,7 @@ String phonenumbrtxt;
         updateUI(uiState, null, cred);
     }
 
-    private void updateUI(int uiState, FirebaseUser user, PhoneAuthCredential cred) {
+    private void updateUI(int uiState, final FirebaseUser user, PhoneAuthCredential cred) {
         switch (uiState) {
             case STATE_INITIALIZED:
                 // Initialized state, show only the phone number field and start button
@@ -449,7 +450,7 @@ String phonenumbrtxt;
                 disableViews(mStartButton, mVerifyButton, mResendButton, mPhoneNumberField,
                         mVerificationField);
                 mDetailText.setText(R.string.status_verification_succeeded);
-
+                tinyDB.putString("uphone",phoneNumber);
                 // Set the verification text based on the credential
                 if (cred != null) {
                     if (cred.getSmsCode() != null) {
@@ -501,12 +502,15 @@ String phonenumbrtxt;
 
                         Log.e("Y","Y");
                         pd.dismiss();
+                        tinyDB.putString("uid",user.getUid());
+
                         startActivity(new Intent(MainActivity.this,Main2Activity.class));
                         // run some code
                     }
                     else {
                         pd.dismiss();
                                                         bottom.setVisibility(View.GONE);
+
                 top.setVisibility(View.VISIBLE);
 
                         Log.e("N","N");
@@ -551,7 +555,7 @@ String phonenumbrtxt;
     }
 
     private boolean validatePhoneNumber() {
-        String phoneNumber = mPhoneNumberField.getText().toString();
+        phoneNumber = mPhoneNumberField.getText().toString();
         int length =mPhoneNumberField.getText().length();
         if (TextUtils.isEmpty(phoneNumber)) {
             mPhoneNumberField.setError("Invalid phone number.");
@@ -687,13 +691,13 @@ String phonenumbrtxt;
                    gendervalue = (String) radioButton.getText();
                    Log.e("gender valie",gendervalue);
 
-                    FirebaseStorage storage = FirebaseStorage.getInstance();
-                    StorageReference storageRef = storage.getReference();
+                    StorageReference storage = FirebaseStorage.getInstance().getReference();
+                 //   StorageReference storageRef = storage.getReference();
 
 //        StorageReference mountainsRef = storageRef.child("mountains.jpg");
 
 // Create a reference to 'images/mountains.jpg'
-                    StorageReference mountainImagesRef = storageRef.child("userimages/"+mDetailText.getText().toString()+".jpg");
+                    final StorageReference mountainImagesRef = storage.child("userimages/"+tinyDB.getString("uid")+".jpg");
 
 // While the file names are the same, the references point to different files
                     mountainImagesRef.getName().equals(mountainImagesRef.getName());    // true
@@ -706,30 +710,65 @@ String phonenumbrtxt;
                     byte[] data = baos.toByteArray();
 
                     UploadTask uploadTask = mountainImagesRef.putBytes(data);
-                    uploadTask.addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception exception) {
 
-                            // Toast.makeText(MainActivity.this, "Failed", Toast.LENGTH_SHORT).show();
-                            Log.e("Status of Upload","Failed");
-                            // Handle unsuccessful uploads
+
+
+                    Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                        @Override
+                        public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                            if (!task.isSuccessful()) {
+                                throw task.getException();
+                            }
+
+                            // Continue with the task to get the download URL
+                            return mountainImagesRef.getDownloadUrl();
                         }
-                    }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    }).addOnCompleteListener(new OnCompleteListener<Uri>() {
                         @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
-                            // Toast.makeText(MainActivity.this, "Succes", Toast.LENGTH_SHORT).show();
-                            Log.e("Status of Upload",taskSnapshot.getDownloadUrl().toString());
-                            profileimgurl = taskSnapshot.getDownloadUrl().toString();
-                            validateprofile();
+                        public void onComplete(@NonNull Task<Uri> task) {
+                            if (task.isSuccessful()) {
+                                Uri downloadUri = task.getResult();
+                                Log.e("Status of Upload",task.getResult().toString());
+                                profileimgurl = task.getResult().toString();
+                                validateprofile();
+                            } else {
+                                pd.dismiss();
+                                Toast.makeText(MainActivity.this, "Please Try Again", Toast.LENGTH_SHORT).show();
 
-
-
-
-
-                            // ...
+                                // Handle failures
+                                // ...
+                            }
                         }
                     });
+//
+//                    uploadTask.addOnFailureListener(new OnFailureListener() {
+//                        @Override
+//                        public void onFailure(@NonNull Exception exception) {
+//
+//                            // Toast.makeText(MainActivity.this, "Failed", Toast.LENGTH_SHORT).show();
+//                            Log.e("Status of Upload","Failed");
+//                            // Handle unsuccessful uploads
+//                        }
+//                    }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//                        @Override
+//                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//
+//                            Task<Uri> dd = mountainImagesRef.getDownloadUrl();
+//
+//
+//                            // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+//                            // Toast.makeText(MainActivity.this, "Succes", Toast.LENGTH_SHORT).show();
+//                            Log.e("Status of Upload",taskSnapshot.getUploadSessionUri().toString());
+//                            profileimgurl = taskSnapshot.getUploadSessionUri().toString();
+//                            validateprofile();
+//
+//
+//
+//
+//
+//                            // ...
+//                        }
+//                    });
 
 
 
@@ -844,9 +883,9 @@ String phonenumbrtxt;
 //                myRef.child(mDetailText.getText().toString());
 
 
-                Log.e("dfsfsd",fullnametxt.getText().toString()+emailtxt.getText().toString()+agetxt.getText().toString()+mDetailText.getText().toString()+profileimgurl+gendervalue);
+                Log.e("profile Details",fullnametxt.getText().toString()+emailtxt.getText().toString()+agetxt.getText().toString()+mDetailText.getText().toString()+profileimgurl+gendervalue);
 
-                Signup signup = new Signup(fullnametxt.getText().toString(),emailtxt.getText().toString(),agetxt.getText().toString(),mDetailText.getText().toString(),profileimgurl,gendervalue);
+                Signup signup = new Signup(fullnametxt.getText().toString(),emailtxt.getText().toString(),agetxt.getText().toString(),mDetailText.getText().toString(),profileimgurl,gendervalue,tinyDB.getString("uphone"));
                   DatabaseReference myRef = database.getReference("users").child(mDetailText.getText().toString());
                 myRef.setValue(signup);
 

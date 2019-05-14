@@ -1,11 +1,10 @@
-
-
-    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:padding="15dp"
-        android:id="@android:id/text1"
-        style="?android:attr/spinnerDropDownItemStyle"
-        android:textColor="@color/whiteText"
-        android:textStyle="bold" />
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@android:id/text1"
+    style="?android:attr/spinnerDropDownItemStyle"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:gravity="center"
+    android:padding="15dp"
+    android:textColor="@color/white"
+    android:textStyle="bold" />

@@ -9,7 +9,7 @@
     tools:context="com.androidhari.mymedchal.GetStarted">
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/headname2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"

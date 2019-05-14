@@ -60,7 +60,7 @@
             android:scaleType="centerCrop"
             android:src="@android:drawable/ic_menu_myplaces" />
         <TextView
-            android:id="@+id/text"
+            android:id="@+id/statusmsg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/appImage"
@@ -76,7 +76,7 @@
             android:layout_width="20dp"
             android:layout_height="20dp"
 
-            android:layout_below="@id/text"
+            android:layout_below="@id/statusmsg"
             android:layout_toRightOf="@id/appImage"
             android:src="@android:drawable/ic_menu_mylocation" />
         <TextView
@@ -84,7 +84,7 @@
             style="@style/Base.TextAppearance.AppCompat.Subhead"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/text"
+            android:layout_below="@+id/statusmsg"
             android:layout_toRightOf="@+id/location"
             android:paddingLeft="6dp"
             android:text="SubTiltle"

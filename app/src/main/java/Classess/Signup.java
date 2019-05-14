@@ -13,14 +13,25 @@ public class Signup {
     public String imgurl;
     public String gender;
     public String xxx;
+    public String phone;
 
-    public Signup(String username, String email, String age, String userid, String imgurl, String gender) {
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public Signup(String username, String email, String age, String userid, String imgurl, String gender, String phone) {
         this.username = username;
         this.email = email;
         this.age = age;
         this.userid = userid;
         this.imgurl = imgurl;
         this.gender = gender;
+        this.phone = phone;
+
     }
 
     public Signup(String userid, String imgurl) {

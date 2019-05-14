@@ -17,6 +17,7 @@ import java.util.Map;
 import Classess.CategoryModel;
 import Classess.CommentsModel;
 import Classess.DetailsModel;
+import Classess.LocationsModel;
 import Classess.MediaModel;
 import Classess.Photosmodel;
 import Classess.QAmodels;
@@ -41,16 +42,75 @@ postvalue();
 
     private void postvalue() {
 
-  //      Signup signup = new Signup();
+
+        //Add Locations
+
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
+//
+//
+//
+//        //uploadPhotos
+//        DatabaseReference myRef = database.getReference("locations");
+//        LocationsModel category = new LocationsModel();
+//        category.setUrl("https://www.business.qld.gov.au/__data/assets/image/0023/215573/go-local-grow-local.png");
+//        category.setName("Athvelly");
+//
+//        myRef.push().setValue(category);
+//
+//        category.setUrl("https://www.business.qld.gov.au/__data/assets/image/0023/215573/go-local-grow-local.png");
+//        category.setName("Medchal");
+//
+//        myRef.push().setValue(category);
+//        category.setUrl("https://www.business.qld.gov.au/__data/assets/image/0023/215573/go-local-grow-local.png");
+//        category.setName("Kandlakoya");
+//
+//        myRef.push().setValue(category);
+//        category.setUrl("https://www.business.qld.gov.au/__data/assets/image/0023/215573/go-local-grow-local.png");
+//        category.setName("Gundlapochampally");
+//
+//        myRef.push().setValue(category);category.setUrl("https://www.business.qld.gov.au/__data/assets/image/0023/215573/go-local-grow-local.png");
+//        category.setName("Gowdavelli");
+//
+//        myRef.push().setValue(category);
+//        category.setUrl("https://www.business.qld.gov.au/__data/assets/image/0023/215573/go-local-grow-local.png");
+//        category.setName("Railapur");
+//
+//        myRef.push().setValue(category);
+//        category.setUrl("https://www.business.qld.gov.au/__data/assets/image/0023/215573/go-local-grow-local.png");
+//        category.setName("Pudur");
+//
+//        myRef.push().setValue(category);
 
 
 
-        //uploadPhotos
-        DatabaseReference myRef = database.getReference("photos").child("-LbOhR4pW4FoDiSbQU5k");
-        Photosmodel category = new Photosmodel();
-        category.setImgurl("https://www.business.qld.gov.au/__data/assets/image/0023/215573/go-local-grow-local.png");
+
+  //      Signup signup = new Signup();
+
+//        FirebaseDatabase database = FirebaseDatabase.getInstance();
+//
+//
+//
+//        //uploadPhotos
+//        DatabaseReference myRef = database.getReference("photos").child("-LbOhR4pW4FoDiSbQU5k");
+//        Photosmodel category = new Photosmodel();
+//        category.setImgurl("https://www.business.qld.gov.au/__data/assets/image/0023/215573/go-local-grow-local.png");
+//        category.setTimestanp(45534542);
+//        category.setUserid("fdsfsdf");
+//        category.setUsername("fsdfsdfsdfdsf");
+//        category.setProfilepic("dfsdfsfsdf");
+//        category.setNameofbusiness("GA Mobiles");
+//        category.setLocation("fdsfsdf");
+//        category.setKey("hjhb");
+//        category.setDescription("New photo");
+//        myRef.push().setValue(category);
+
+
+        //Q&A
+
+        DatabaseReference myRef = database.getReference("Q&A");
+        QAmodels category = new QAmodels();
+        category.setAns("4adasfafa");
         category.setTimestanp(45534542);
         category.setUserid("fdsfsdf");
         category.setUsername("fsdfsdfsdfdsf");
@@ -58,42 +118,27 @@ postvalue();
         category.setNameofbusiness("GA Mobiles");
         category.setLocation("fdsfsdf");
         category.setKey("hjhb");
-        category.setDescription("New photo");
+        category.setQuestion("how are you");
         myRef.push().setValue(category);
-
-
-        //Q&A
-
-//        DatabaseReference myRef = database.getReference("Q&A");
-//        QAmodels category = new QAmodels();
-//        category.setAns("4adasfafa");
-//        category.setTimestanp(45534542);
-//        category.setUserid("fdsfsdf");
-//        category.setUsername("fsdfsdfsdfdsf");
-//        category.setProfilepic("dfsdfsfsdf");
-//        category.setNameofbusiness("GA Mobiles");
-//        category.setLocation("fdsfsdf");
-//        category.setKey("hjhb");
-//        category.setQuestion("how are you");
-//        myRef.push().setValue(category);
 
 
 
 
         //ReviewModels
-
+//
 //        DatabaseReference myRef = database.getReference("reviews");
 //        Reviewmodels category = new Reviewmodels();
 //        category.setStars("4");
 //        category.setTimestanp(45534542);
 //        category.setTitle("dfdsf");
-//        category.setKey("hjhb");
 //        category.setDescription("fsdfsdfdsfsdfsdf");
 //        category.setUserid("fdsfsdf");
 //        category.setUsername("fsdfsdfsdfdsf");
 //        category.setProfilepic("dfsdfsfsdf");
 //        category.setNameofbusiness("GA Mobiles");
 //        category.setLocation("fdsfsdf");
+//        category.setKey("-LbOhR4pW4FoDiSbQU5k");
+
 //        myRef.push().setValue(category);
 
 

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/parent"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="5dp"
+        card_view:cardBackgroundColor="@color/white"
+        card_view:cardCornerRadius="5dp"
+        card_view:cardUseCompatPadding="true"
+        card_view:contentPadding="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <com.androidhari.mymedchal.SupportFiles.SquareImageView
+                android:id="@+id/imageView"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                card_view:srcCompat="@drawable/add_photo" />
+
+            <TextView
+                android:id="@+id/add"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="Add Image" />
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/buttonstyle"
+            android:text="Later"
+            android:textColor="@color/active_indicator" />
+
+        <Button
+            android:id="@+id/submit"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/buttonstyle"
+            android:text="Submit"
+            android:textColor="@color/active_indicator" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:text="You can hit submit if you are all done" />
+
+
+</LinearLayout>

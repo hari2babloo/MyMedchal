@@ -21,6 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import Classess.DetailsModel;
+import Classess.TinyDB;
 
 
 /**
@@ -28,7 +29,8 @@ import Classess.DetailsModel;
  */
 public class OverviewFragment extends Fragment {
 
-    TextView desc,services,timing,email,website,workingdays,addr,awards,since,cost;
+    TextView desc,services,timing,email,website,workingdays,addr,awards,since,cost,contact,propname;
+    TinyDB tinyDB;
     public OverviewFragment() {
         // Required empty public constructor
     }
@@ -43,6 +45,7 @@ public class OverviewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_overview, container, false);
+        tinyDB = new TinyDB(getContext());
         // Inflate the layout for this fragment
         desc =(TextView)v.findViewById(R.id.desc);
         services = (TextView)v.findViewById(R.id.serv);
@@ -54,9 +57,12 @@ public class OverviewFragment extends Fragment {
         awards = (TextView)v.findViewById(R.id.award);
         since = (TextView)v.findViewById(R.id.since);
         cost = (TextView)v.findViewById(R.id.rate);
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("Mobiles");
+        contact = (TextView)v.findViewById(R.id.contact);
+        propname = (TextView)v.findViewById(R.id.propname);
+
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("BusinessLists").child(tinyDB.getString("location"));
         mDatabase.keepSynced(true);
-        mDatabase.orderByChild("name").equalTo("GA Mobiles").addValueEventListener(new ValueEventListener() {
+        mDatabase.orderByKey().equalTo(tinyDB.getString("key")).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Log.e("data",dataSnapshot.toString());
@@ -71,8 +77,10 @@ public class OverviewFragment extends Fragment {
                     workingdays.setText(ss.workindays);
                     addr.setText(ss.address+",\n" +ss.landmark + ",\n" +ss.lane+",\n"+ss.colony);
                     awards.setText(ss.awards);
-                    since.setText(ss.since);
-                    cost.setText(ss.cost);
+                    since.setText("Establishment Year "+ ss.since);
+                    cost.setText("Cost " +ss.cost);
+                    contact.setText(ss.contact +", "+ss.contact2 +", "+ss.contact3);
+                    propname.setText("Proprietor name : " +ss.propname);
                 }
             }
             @Override
