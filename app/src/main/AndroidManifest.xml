@@ -14,6 +14,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".ManageLists"></activity>
         <activity android:name=".MainActivity" />
         <activity android:name=".GetStarted" />
         <activity android:name=".Entermobile" />
@@ -21,24 +22,24 @@
         <activity
             android:name=".Main2Activity"
             android:label="@string/title_activity_main2"
-            android:theme="@style/AppTheme"></activity>
-        <activity android:name=".SubCategory" />
-        <activity android:name=".BusinessLists" />
-        <activity android:name=".SampleDataUpload" />
-        <activity android:name=".Details" />
-        <activity android:name=".Details2" />
-        <activity android:name=".SplashScreen" />
-        <activity android:name=".Intro">
+            android:theme="@style/AppTheme" />
+        <activity android:name=".SubCategory">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".BusinessLists" />
+        <activity android:name=".SampleDataUpload" />
+        <activity android:name=".Details" />
+        <activity android:name=".Details2" />
+        <activity android:name=".SplashScreen" />
+        <activity android:name=".Intro"></activity>
         <activity android:name=".Bottom" />
         <activity android:name=".Search" />
         <activity android:name=".FavList" />
-        <activity android:name=".Request"></activity>
+        <activity android:name=".Request" />
     </application>
 
 </manifest>

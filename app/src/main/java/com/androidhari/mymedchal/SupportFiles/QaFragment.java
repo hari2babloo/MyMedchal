@@ -36,12 +36,16 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.sql.Time;
+import java.util.Date;
 
 import Classess.Photosmodel;
 import Classess.QAmodels;
@@ -169,8 +173,15 @@ public class QaFragment extends Fragment {
             }
         });
 
-        FirebaseRecyclerOptions personsOptions = new FirebaseRecyclerOptions.Builder<QAmodels>().setQuery(mDatabase.orderByChild("key").equalTo(tinyDB.getString("key")),  QAmodels.class).build();
+
+
+
+        Query query = mDatabase.orderByChild("key").equalTo(tinyDB.getString("key")).limitToLast(100);
+        FirebaseRecyclerOptions personsOptions = new FirebaseRecyclerOptions.Builder<QAmodels>().setQuery(query,  QAmodels.class).build();
         mPeopleRVAdapter = new FirebaseRecyclerAdapter<QAmodels, NewsViewHolder>(personsOptions) {
+
+
+
             @Override
             protected void onBindViewHolder(NewsViewHolder holder, final int position, final QAmodels model) {
 
@@ -195,7 +206,12 @@ public class QaFragment extends Fragment {
             }
         };
 
+
         mRecycleView.setAdapter(mPeopleRVAdapter);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        linearLayoutManager.setReverseLayout(true);
+        linearLayoutManager.setStackFromEnd(true);
+        mRecycleView.setLayoutManager(linearLayoutManager);
 
 
 

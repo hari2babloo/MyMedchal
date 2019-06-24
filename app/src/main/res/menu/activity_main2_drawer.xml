@@ -28,7 +28,12 @@
                 android:id="@+id/add"
                 android:icon="@drawable/ic_add"
                 android:iconTint="@color/bg"
-                android:title="Add My Business" />
+                android:title="Add My List" />
+            <item
+                android:id="@+id/manage"
+                android:icon="@drawable/ic_add"
+                android:iconTint="@color/bg"
+                android:title="Manage My Lists" />
             <item
                 android:id="@+id/log_out"
                 android:icon="@drawable/ic_logout"

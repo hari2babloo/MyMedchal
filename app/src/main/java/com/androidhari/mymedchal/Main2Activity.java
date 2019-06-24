@@ -2,6 +2,7 @@ package com.androidhari.mymedchal;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -30,6 +31,8 @@ import android.widget.Toast;
 import com.androidhari.mymedchal.SupportFiles.GridAdapter;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -37,6 +40,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
 import com.luseen.spacenavigation.SpaceItem;
 import com.luseen.spacenavigation.SpaceNavigationView;
@@ -211,6 +216,9 @@ if (TextUtils.isEmpty(tinyDB.getString("uname"))){
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Log.e("keys", dataSnapshot.toString());
+
+                items.add("Select a Location");
+
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     String eventID = ds.getKey();
                     LocationsModel locationsModel = ds.getValue(LocationsModel.class);
@@ -249,6 +257,8 @@ if (TextUtils.isEmpty(tinyDB.getString("uname"))){
 
                 Log.e("Count ", "" + dataSnapshot.toString());
                 datasnapshot = dataSnapshot.toString();
+                categories.clear();
+                categoriesimg.clear();
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
 
 
@@ -306,7 +316,28 @@ if (TextUtils.isEmpty(tinyDB.getString("uname"))){
 
 
         navusername.setText(tinyDB.getString("uname"));
-        Glide.with(Main2Activity.this).load(tinyDB.getString("uimage")).diskCacheStrategy(DiskCacheStrategy.DATA).into(profimage);
+
+//        FirebaseStorage storage = FirebaseStorage.getInstance();
+//        StorageReference storage = FirebaseStorage.getInstance("gs://mymedchal-e4910.appspot.com/userimages").getReference();
+//
+        StorageReference storageReference  = FirebaseStorage.getInstance().getReference().child("userimages");
+        //StorageReference pathReference = storageRef.child("images/stars.jpg");
+
+
+        storageReference.child("FdZiqdT5yGPM4FGeLzTVMkR5rQf1.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+//                Glide.with(Main2Activity.this).load(tinyDB.getString("uimage")).diskCacheStrategy(DiskCacheStrategy.DATA).into(profimage);
+                Glide.with(Main2Activity.this).load(uri).diskCacheStrategy(DiskCacheStrategy.DATA).into(profimage);
+                // Got the download URL for 'users/me/profile.png'
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle any errors
+            }
+        });
+
         navmobno.setText(tinyDB.getString("uphone"));
     }
 
@@ -428,7 +459,14 @@ if (TextUtils.isEmpty(tinyDB.getString("uname"))){
 
         } else if (id == R.id.contact) {
 
-        } else if (id == R.id.log_out) {
+        } else if (id == R.id.manage){
+            startActivity(new Intent(Main2Activity.this,ManageLists.class));
+
+        }
+
+
+
+        else if (id == R.id.log_out) {
             mAuth.signOut();
             startActivity(new Intent(Main2Activity.this,Intro.class));
         }
