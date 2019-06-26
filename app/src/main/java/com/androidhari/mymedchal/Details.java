@@ -1,11 +1,8 @@
 package com.androidhari.mymedchal;
 
-import android.Manifest;
 import android.app.Dialog;
-import android.app.TabActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -13,11 +10,9 @@ import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
@@ -40,7 +35,6 @@ import com.androidhari.mymedchal.SupportFiles.QaFragment;
 import com.androidhari.mymedchal.SupportFiles.ReviewsFragment;
 import com.androidhari.mymedchal.SupportFiles.ViewPagerAdapter;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -55,11 +49,8 @@ import com.synnapps.carouselview.ImageListener;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import Classess.DetailsModel;
-import Classess.LocationsModel;
-import Classess.Photosmodel;
 import Classess.QAmodels;
 import Classess.Reviewmodels;
 import Classess.TinyDB;
@@ -271,6 +262,8 @@ public class Details extends AppCompatActivity {
 
     private void UIbindData() {
 
+        Log.e("Key",tinyDB.getString("key"));
+        Log.e("location",tinyDB.getString("location"));
         mDatabase2 = FirebaseDatabase.getInstance().getReference().child("BusinessLists").child(tinyDB.getString("location"));
         mDatabase2.orderByKey().equalTo(tinyDB.getString("key")).addValueEventListener(new ValueEventListener() {
             @Override
@@ -281,10 +274,6 @@ public class Details extends AppCompatActivity {
 
                     detailsModel = ds.getValue(DetailsModel.class);
                     detailsModel.setKey(ds.getKey());
-
-
-
-
 
 
                     busname.setText(detailsModel.name);
@@ -462,7 +451,7 @@ public class Details extends AppCompatActivity {
                         });
 
 
-                        Button dialogButton = (Button) dialog.findViewById(R.id.button2);
+                        Button dialogButton = (Button) dialog.findViewById(R.id.edit);
                         // if button is clicked, close the custom dialog
                         dialogButton.setOnClickListener(new View.OnClickListener() {
                             @Override

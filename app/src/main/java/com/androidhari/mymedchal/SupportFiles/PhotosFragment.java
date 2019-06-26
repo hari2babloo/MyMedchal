@@ -19,20 +19,15 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,7 +36,6 @@ import com.androidhari.mymedchal.R;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -50,7 +44,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -64,7 +57,6 @@ import java.util.Collections;
 import java.util.List;
 
 import Classess.Photosmodel;
-import Classess.Reviewmodels;
 import Classess.TinyDB;
 
 import static android.app.Activity.RESULT_OK;
@@ -275,7 +267,7 @@ public class PhotosFragment extends Fragment {
                     }
                 });
 
-                Button dialogButton = (Button) dialog.findViewById(R.id.button2);
+                Button dialogButton = (Button) dialog.findViewById(R.id.edit);
                 // if button is clicked, close the custom dialog
                 dialogButton.setOnClickListener(new View.OnClickListener() {
                     @Override

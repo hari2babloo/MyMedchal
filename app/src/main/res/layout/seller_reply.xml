@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    android:elevation="5dp"
+    android:orientation="vertical"
+    app:cardBackgroundColor="@color/active_indicator"
+    app:cardCornerRadius="15dp"
+    app:cardElevation="5dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="10dp"
+            android:paddingLeft="20dp">
+
+            <ImageView
+                android:id="@+id/usrimg"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="10dp"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_user" />
+
+            <TextView
+                android:id="@+id/username"
+                android:layout_width="wrap_content"
+
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:text="name"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="20dp"
+            android:paddingRight="10dp"
+            >
+
+            <RatingBar
+                android:id="@+id/stars"
+                style="@style/Widget.AppCompat.RatingBar.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="normal" />
+
+            <com.androidhari.mymedchal.SupportFiles.TouchImageView
+                android:id="@+id/image"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:scaleType="centerCrop"
+                android:adjustViewBounds="true"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/reply"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="REPLY"
+                android:textColor="#673AB7"
+                android:textSize="18dp" />
+
+
+        </LinearLayout>
+    </LinearLayout>
+</android.support.v7.widget.CardView>

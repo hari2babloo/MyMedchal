@@ -19,6 +19,16 @@ public class RequestsModel {
     String visitdate;
     String statusmsg;
 
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    String location;
+
     public String getUphone() {
         return uphone;
     }

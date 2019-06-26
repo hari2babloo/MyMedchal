@@ -109,19 +109,19 @@
                 android:text="5.0"
 
                 android:padding="2dp"
-                 android:textColor="@color/white"
+                android:textColor="@color/white"
                 android:background="@color/colorAccent"
                 android:gravity="center"
                 />
 
-        <RatingBar
-            android:id="@+id/ratingBar"
-        android:padding="2dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="?android:attr/ratingBarStyleSmall"
-android:layout_marginLeft="5dp"
-            android:layout_centerHorizontal="false" />
+            <RatingBar
+                android:id="@+id/ratingBar"
+                android:padding="2dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="?android:attr/ratingBarStyleSmall"
+                android:layout_marginLeft="5dp"
+                android:layout_centerHorizontal="false" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -165,26 +165,26 @@ android:layout_marginLeft="5dp"
                 android:text="Timings"
                 />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
 
-            android:id="@+id/workingdays"
-            android:gravity="center"
-            android:layout_weight="1"
+                android:id="@+id/workingdays"
+                android:gravity="center"
+                android:layout_weight="1"
 
-            android:text="Mon-Fri"></TextView>
+                android:text="Mon-Fri"></TextView>
 
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
 
-            android:gravity="end"
-            android:layout_weight="1"
-            android:text="$$$">
+                android:gravity="end"
+                android:layout_weight="1"
+                android:text="$$$">
 
-        </TextView>
+            </TextView>
         </LinearLayout>
 
     </RelativeLayout>

@@ -30,13 +30,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
-import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.androidhari.mymedchal.BusinessLists;
-import com.androidhari.mymedchal.Details;
-import com.androidhari.mymedchal.MainActivity;
 import com.androidhari.mymedchal.R;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -59,7 +55,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
-import Classess.DetailsModel;
 import Classess.Reviewmodels;
 import Classess.TinyDB;
 
@@ -302,7 +297,7 @@ public class ReviewsFragment extends Fragment {
                     }
                 });
 
-                Button dialogButton = (Button) dialog.findViewById(R.id.button2);
+                Button dialogButton = (Button) dialog.findViewById(R.id.edit);
                 // if button is clicked, close the custom dialog
                 dialogButton.setOnClickListener(new View.OnClickListener() {
                     @Override

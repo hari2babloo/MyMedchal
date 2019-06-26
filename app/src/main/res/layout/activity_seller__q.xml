@@ -1,0 +1,26 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:id="@+id/addqa"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="20dp"
+        android:padding="5dp"
+        android:text="Add Question"
+        android:textAlignment="viewEnd"
+        android:textColor="@color/blue"
+        android:textSize="18sp" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/stars"
+        android:layout_centerHorizontal="true" />
+
+</LinearLayout>

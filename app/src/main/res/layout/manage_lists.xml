@@ -9,19 +9,8 @@
     tools:context=".ManageLists">
 
 
-    <TextView
-        android:id="@+id/select"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Select Your Location" />
-
-    <Spinner
-        android:id="@+id/spinner"
-
-
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:background="@drawable/border"
-         />
+        android:layout_height="match_parent" />
 </LinearLayout>

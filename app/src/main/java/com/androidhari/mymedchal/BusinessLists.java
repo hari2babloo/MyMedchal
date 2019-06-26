@@ -34,15 +34,12 @@ public class BusinessLists extends AppCompatActivity {
     DatabaseReference mDatabase;
     TinyDB tinyDB;
     android.support.v7.widget.Toolbar toolbar;
-
     // private FirebaseRecyclerAdapter<Signup, TaskViewHolder> adapter;
     private FirebaseRecyclerOptions<Signup> options;
-
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sub_category);
-
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
