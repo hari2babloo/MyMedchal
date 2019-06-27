@@ -14,24 +14,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SellerStuff.Seller_Review"></activity>
+        <activity android:name=".SellerStuff.Seller_Photos"></activity>
+        <activity android:name=".SellerStuff.Seller_Review" />
         <activity android:name=".SellerStuff.Seller_QA" />
         <activity android:name=".Seller_Dashpage" />
         <activity android:name=".ManageLists" />
         <activity android:name=".MainActivity" />
         <activity android:name=".GetStarted" />
-        <activity android:name=".Entermobile" />
-        <activity android:name=".Dashpage" />
+
         <activity
             android:name=".Main2Activity"
             android:label="@string/title_activity_main2"
             android:theme="@style/AppTheme">
 
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".SubCategory" />
         <activity android:name=".BusinessLists" />
@@ -40,7 +35,11 @@
         <activity android:name=".Details2" />
         <activity android:name=".SplashScreen" />
         <activity android:name=".Intro">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name=".Bottom" />
         <activity android:name=".Search" />

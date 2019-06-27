@@ -5,6 +5,24 @@ public class ManageListModel {
 
     String uname;
     String location;
+    String bname;
+    String subcategory;
+
+    public String getSubcategory() {
+        return subcategory;
+    }
+
+    public void setSubcategory(String subcategory) {
+        this.subcategory = subcategory;
+    }
+
+    public String getBname() {
+        return bname;
+    }
+
+    public void setBname(String bname) {
+        this.bname = bname;
+    }
 
     public void setTimestamp(Long timestamp) {
         this.timestamp = timestamp;

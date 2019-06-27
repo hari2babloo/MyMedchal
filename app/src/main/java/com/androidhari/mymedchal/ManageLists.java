@@ -26,8 +26,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import Classess.ManageListModel;
@@ -136,9 +138,12 @@ public class ManageLists extends AppCompatActivity {
 
             Log.e("recycleritems",data.get(position).getLocation());
 
-                myHolder.name.setText(current.getUname());
+                myHolder.name.setText(current.getBname());
+
                 myHolder.location.setText(current.getLocation());
-                myHolder.timestamp.setText(String.valueOf(current.getTimestamp()));
+                myHolder.subcat.setText(current.getSubcategory());
+            String dateString = new SimpleDateFormat("dd/MM/yyyy").format(new Date(current.getTimestamp()));
+                myHolder.timestamp.setText(dateString);
                 myHolder.imgnext.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -177,7 +182,7 @@ public class ManageLists extends AppCompatActivity {
 
 
         class MyHolder extends RecyclerView.ViewHolder {
-            TextView name,timestamp,location;
+            TextView name,timestamp,location,subcat;
             ImageView imgnext;
             // create constructor to get widget reference
             public MyHolder(View itemView) {
@@ -189,6 +194,8 @@ public class ManageLists extends AppCompatActivity {
                 timestamp = itemView.findViewById(R.id.timstamp);
                 location = itemView.findViewById(R.id.location);
                 imgnext = itemView.findViewById(R.id.imgnext);
+
+                subcat = itemView.findViewById(R.id.subcat);
 
 //                view = itemView.findViewById(R.id.view);
 //                edit = itemView.findViewById(R.id.edit);
