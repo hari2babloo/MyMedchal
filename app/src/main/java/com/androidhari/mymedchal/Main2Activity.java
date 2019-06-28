@@ -169,12 +169,13 @@ public class Main2Activity extends AppCompatActivity
         Log.e("username",tinyDB.getString("uid"));
         Log.e("username",tinyDB.getString("username"));
 
-if (TextUtils.isEmpty(tinyDB.getString("uname"))){
-    DatabaseReference sss = rootRef.child("users");
 
-    Log.e("username","came inside");
+        if (TextUtils.isEmpty(tinyDB.getString("uname"))){
+        DatabaseReference sss = rootRef.child("users");
 
-    sss.orderByKey().equalTo(tinyDB.getString("uid")).addValueEventListener(new ValueEventListener() {
+        Log.e("username","came inside");
+
+        sss.orderByKey().equalTo(tinyDB.getString("uid")).addValueEventListener(new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
             Log.e("keys", dataSnapshot.toString());
@@ -204,43 +205,46 @@ if (TextUtils.isEmpty(tinyDB.getString("uname"))){
     });
 
 }
-        pd.setCancelable(false);
-        pd.setMessage("Getting Locations");
-        pd.show();
 
-        //       scoresRef.keepSynced(false);
 
-        DatabaseReference sss = rootRef.child("locations");
 
-        sss.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Log.e("keys", dataSnapshot.toString());
 
-                items.add("Select a Location");
+    pd.setCancelable(false);
+    pd.setMessage("Getting Locations");
+    pd.show();
 
-                for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    String eventID = ds.getKey();
-                    LocationsModel locationsModel = ds.getValue(LocationsModel.class);
-                    items.add(locationsModel.name);
-                    Log.d("TAG2", locationsModel.name);
-                }
-                Log.d("TAG2", String.valueOf(items));
-                //  rootRef.keepSynced(true);
-                bindspinnerData();
+    //       scoresRef.keepSynced(false);
+
+    DatabaseReference sss = rootRef.child("locations");
+
+    sss.addValueEventListener(new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            Log.e("keys", dataSnapshot.toString());
+
+            items.add("Select a Location");
+
+            for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                String eventID = ds.getKey();
+                LocationsModel locationsModel = ds.getValue(LocationsModel.class);
+                items.add(locationsModel.name);
+                Log.d("TAG2", locationsModel.name);
             }
+            Log.d("TAG2", String.valueOf(items));
+            //  rootRef.keepSynced(true);
+            bindspinnerData();
+        }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-
-
-        });
+        }
 
 
+    });
 
-        rootRef.keepSynced(true);
+
+
         //  DatabaseReference rootRef2 = FirebaseDatabase.getInstance().getReference();
 
 
@@ -369,12 +373,15 @@ if (TextUtils.isEmpty(tinyDB.getString("uname"))){
 
         spinner.setAdapter(adapter);
 
+
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Log.e("Spinner", items.get(position));
                 spinnerlocation = items.get(position);
                 tinyDB.putString("location", spinnerlocation);
+
+
 
                 getgriddata();
             }
@@ -384,6 +391,27 @@ if (TextUtils.isEmpty(tinyDB.getString("uname"))){
 
             }
         });
+if (TextUtils.isEmpty(tinyDB.getString("location"))||tinyDB.getString("location").equalsIgnoreCase("Select a Location")){
+
+
+
+    spinner.performClick();
+}
+
+else {
+
+        String location =     tinyDB.getString("location");
+
+        if (location != null) {
+            int spinnerPosition = adapter.getPosition(location);
+            spinner.setSelection(spinnerPosition);
+        }
+    }
+
+
+
+
+
 
 //
 

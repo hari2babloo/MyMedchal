@@ -118,7 +118,7 @@ public class Seller_Review extends AppCompatActivity {
             @Override
             protected void onBindViewHolder(NewsViewHolder holder, final int position, final Reviewmodels model) {
                 holder.post_title.setText(model.title);
-                holder.post_desc.setText("Owner Replies :  " +model.getDescription());
+                holder.post_desc.setText("Owner Replies :  " +model.getAns());
                 holder.username.setText(model.getUsername());
                 holder.ratingBar.setRating(Float.parseFloat(String.valueOf(model.getStars())));
                 Glide.with(Seller_Review.this).load(model.image).diskCacheStrategy(DiskCacheStrategy.DATA).into(holder.image);
@@ -167,6 +167,7 @@ public class Seller_Review extends AppCompatActivity {
                                     myRef.child("ans").setValue(editText.getText().toString());
                                     dialog.cancel();
                                     dialog.dismiss();
+
                                 }
                             }
                         });

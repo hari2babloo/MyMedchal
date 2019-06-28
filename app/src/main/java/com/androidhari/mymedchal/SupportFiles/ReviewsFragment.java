@@ -339,7 +339,7 @@ public class ReviewsFragment extends Fragment {
             @Override
             protected void onBindViewHolder(NewsViewHolder holder, final int position, final Reviewmodels model) {
                 holder.post_title.setText(model.title);
-                //holder.post_desc.setText(model.getDescription());
+                holder.post_desc.setText(model.getAns());
                 holder.username.setText(model.getUsername());
                 holder.ratingBar.setRating(Float.parseFloat(String.valueOf(model.getStars())));
                 Glide.with(getContext()).load(model.image).diskCacheStrategy(DiskCacheStrategy.DATA).into(holder.image);

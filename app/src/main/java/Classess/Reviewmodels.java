@@ -18,6 +18,15 @@ public class Reviewmodels {
     public String location;
     public String image;
     public String key;
+    public String ans;
+
+    public String getAns() {
+        return ans;
+    }
+
+    public void setAns(String ans) {
+        this.ans = ans;
+    }
 
     public String getKey() {
         return key;

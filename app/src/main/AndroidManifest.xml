@@ -5,7 +5,10 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION">
 
+    </uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <application
         android:name=".MyMedchal"
         android:allowBackup="true"
@@ -20,7 +23,14 @@
         <activity android:name=".Seller_Dashpage" />
         <activity android:name=".ManageLists" />
         <activity android:name=".MainActivity" />
-        <activity android:name=".GetStarted" />
+        <activity android:name=".GetStarted">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
 
         <activity
             android:name=".Main2Activity"
@@ -35,14 +45,16 @@
         <activity android:name=".Details2" />
         <activity android:name=".SplashScreen" />
         <activity android:name=".Intro">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".Bottom" />
-        <activity android:name=".Search" />
+        <activity android:name=".Search">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Main2Activity" />
+
+
+        </activity>
         <activity android:name=".FavList" />
         <activity android:name=".Request" />
     </application>
