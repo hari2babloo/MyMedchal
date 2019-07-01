@@ -13,6 +13,9 @@ package com.androidhari.mymedchal;
  import android.os.Bundle;
 
  import com.google.android.gms.tasks.Continuation;
+ import com.google.firebase.iid.FirebaseInstanceId;
+ import com.google.firebase.iid.InstanceIdResult;
+ import com.google.firebase.messaging.FirebaseMessaging;
  import com.google.firebase.storage.FirebaseStorage;
  import android.os.Environment;
  import android.provider.MediaStore;
@@ -143,6 +146,7 @@ TinyDB tinyDB;
             onRestoreInstanceState(savedInstanceState);
         }
 
+        setNotifications();
         // Assign views
         mPhoneNumberViews = findViewById(R.id.phoneAuthFields);
         mSignedInViews = findViewById(R.id.signedInButtons);
@@ -275,6 +279,47 @@ TinyDB tinyDB;
             }
         };
         // [END phone_auth_callbacks]-
+    }
+
+    private void setNotifications() {
+
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w("token", "getInstanceId failed", task.getException());
+                            return;
+                        }
+
+                        // Get new Instance ID token
+                        String token = task.getResult().getToken();
+
+                        // Log and toast
+                      //  String msg = getString("TOKEN", token);
+                        Log.d("token", token);
+                        tinyDB.putString("token",token);
+                        Toast.makeText(MainActivity.this, token, Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
+        FirebaseMessaging.getInstance().subscribeToTopic("weather")
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        //String msg = getString("subscribed");
+                        if (!task.isSuccessful()) {
+                            Log.e("Firebasetopic ","Succes Topic Registration");
+
+                        }
+                        Log.d(TAG, "Topic Registered");
+                        Toast.makeText(MainActivity.this, "Topic Registeredd", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
+
     }
 
     private boolean checkPermission() {

@@ -68,7 +68,7 @@ public class Seller_QA extends AppCompatActivity {
                     QAmodels ss = ds.getValue(QAmodels.class);
 
 //                    stars.setText(ss.getStars());
-                    Log.e("reviews", ss.getAns());
+ //                   Log.e("reviews", ss.getAns());
                 }
             }
             @Override
@@ -157,8 +157,17 @@ public class Seller_QA extends AppCompatActivity {
 
                 holder.question.setText("Question :  " +model.getQuestion());
                 holder.username.setText( "Answer :  "+model.getUsername());
-                holder.answer.setText(model.getAns());
+//                holder.answer.setText(model.getAns());
 
+                if (!TextUtils.isEmpty(model.getAns())){
+
+                    holder.answer.setText("Owner Replied :  " + model.getAns());
+                }
+
+                else {
+                    holder.answer.setText("Waiting for Reply From Owner");
+
+                }
                 Glide.with(Seller_QA.this).load(model.profilepic).diskCacheStrategy(DiskCacheStrategy.DATA).into(holder.usrimg);
 
                 holder.reply.setOnClickListener(new View.OnClickListener() {
@@ -221,7 +230,7 @@ public class Seller_QA extends AppCompatActivity {
                     }
                 });
 //                holder.setImage(getBaseContext(), model.getImage());
-                Log.e("result",model.getAns());
+ //               Log.e("result",model.getAns());
 
             }
 

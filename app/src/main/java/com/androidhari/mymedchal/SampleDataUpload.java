@@ -108,18 +108,18 @@ postvalue();
 
         //Q&A
 
-        DatabaseReference myRef = database.getReference("Q&A");
-        QAmodels category = new QAmodels();
-        category.setAns("4adasfafa");
-        category.setTimestanp(45534542);
-        category.setUserid("fdsfsdf");
-        category.setUsername("fsdfsdfsdfdsf");
-        category.setProfilepic("dfsdfsfsdf");
-        category.setNameofbusiness("GA Mobiles");
-        category.setLocation("fdsfsdf");
-        category.setKey("hjhb");
-        category.setQuestion("how are you");
-        myRef.push().setValue(category);
+//        DatabaseReference myRef = database.getReference("Q&A");
+//        QAmodels category = new QAmodels();
+//        category.setAns("4adasfafa");
+//        category.setTimestanp(45534542);
+//        category.setUserid("fdsfsdf");
+//        category.setUsername("fsdfsdfsdfdsf");
+//        category.setProfilepic("dfsdfsfsdf");
+//        category.setNameofbusiness("GA Mobiles");
+//        category.setLocation("fdsfsdf");
+//        category.setKey("hjhb");
+//        category.setQuestion("how are you");
+//        myRef.push().setValue(category);
 
 
 
@@ -127,19 +127,59 @@ postvalue();
         //ReviewModels
 //
 //        DatabaseReference myRef = database.getReference("reviews");
-//        Reviewmodels category = new Reviewmodels();
-//        category.setStars("4");
-//        category.setTimestanp(45534542);
-//        category.setTitle("dfdsf");
-//        category.setDescription("fsdfsdfdsfsdfsdf");
-//        category.setUserid("fdsfsdf");
-//        category.setUsername("fsdfsdfsdfdsf");
-//        category.setProfilepic("dfsdfsfsdf");
-//        category.setNameofbusiness("GA Mobiles");
-//        category.setLocation("fdsfsdf");
-//        category.setKey("-LbOhR4pW4FoDiSbQU5k");
+//
+//
+//        myRef.orderByChild("key").equalTo("-Lih14wdd8PDDSy26FDk").addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//
+//                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+////
+//
+////                    String ss = postSnapshot.getKey().toString();
+//                    String ss3 = postSnapshot.child("userid").getValue().toString();
+//                    Log.e("Data",ss3);
+//
+//
+//                    if (ss3.equalsIgnoreCase("0FKjAKMf5iZtAQsikcf2KLAMI1e2")){
+//
+//                        Reviewmodels category = new Reviewmodels();
+//                        category.setStars("4");
+//                        category.setTimestanp(45534542);
+//                        category.setTitle("dfdsf");
+//                        category.setDescription("fsdfsdfdsfsdfsdf");
+//                        category.setUserid("fdsfsdf");
+//                        category.setUsername("fsdfsdfsdfdsf");
+//                        category.setProfilepic("dfsdfsfsdf");
+//                        category.setNameofbusiness("GA Mobiles");
+//                        category.setLocation("fdsfsdf");
+//                        category.setKey("-LbOhR4pW4FoDiSbQU5k");
+//
+//                        myRef.push().setValue(category);
+//
+//                    }
+//
+//
+//                    else {
+//
+//
+//
+//                    }
+//  //                  Log.e("Data2",ss3);
+//                    // TODO: handle the post
+//                }
+//
+//
+//
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
 
-//        myRef.push().setValue(category);
 
 
 //  Category

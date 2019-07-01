@@ -86,7 +86,7 @@ public class Search extends AppCompatActivity implements NavigationView.OnNaviga
         });
         tinyDB = new TinyDB(this);
         pd = new ProgressDialog(this);
-        
+
         editText = (EditText) findViewById(R.id.editText);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         aBoolean = true;

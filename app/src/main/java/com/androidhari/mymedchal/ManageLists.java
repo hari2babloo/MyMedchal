@@ -20,6 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.androidhari.mymedchal.SellerStuff.Seller_Photos;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -136,6 +137,8 @@ public class ManageLists extends AppCompatActivity {
             final ManageListModel current = data.get(position);
 
 
+
+
             Log.e("recycleritems",data.get(position).getLocation());
 
                 myHolder.name.setText(current.getBname());
@@ -155,6 +158,18 @@ public class ManageLists extends AppCompatActivity {
                         startActivity(new Intent(ManageLists.this,Seller_Dashpage.class));
                     }
                 });
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    tinyDB.putString("location",current.getLocation());
+                    tinyDB.putString("key",current.getKey());
+                    Log.e("Key",tinyDB.getString("key"));
+                    Log.e("location",tinyDB.getString("location"));
+
+                    startActivity(new Intent(ManageLists.this,Seller_Dashpage.class));
+                }
+            });
 
 //                myHolder.edit.setOnClickListener(new View.OnClickListener() {
 //                    @Override

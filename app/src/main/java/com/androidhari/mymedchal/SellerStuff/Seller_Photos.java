@@ -39,6 +39,7 @@ import com.androidhari.mymedchal.SupportFiles.PhotosFragment;
 import com.androidhari.mymedchal.SupportFiles.ScalingUtilities;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -503,7 +504,7 @@ public class Seller_Photos extends AppCompatActivity {
             //    setHasStableIds(true);
 
             Log.e("imgurl",current);
-            Glide.with(getApplicationContext()).load(current).diskCacheStrategy(DiskCacheStrategy.DATA).into(((AdapterFish.MyHolder) holder).servicename);
+            Glide.with(Seller_Photos.this).load(current).apply(RequestOptions.centerCropTransform()).into(((MyHolder) holder).servicename);
 
 
             ((AdapterFish.MyHolder) holder).servicename.setOnClickListener(new View.OnClickListener() {
@@ -513,7 +514,7 @@ public class Seller_Photos extends AppCompatActivity {
 
                     shortAnimationDuration = getResources().getInteger(
                             android.R.integer.config_shortAnimTime);
-                    final Dialog fbDialogue = new Dialog(getApplicationContext(), android.R.style.Theme_Black_NoTitleBar);
+                    final Dialog fbDialogue = new Dialog(Seller_Photos.this, android.R.style.Theme_Black_NoTitleBar);
 
                     fbDialogue.getWindow().setBackgroundDrawable(new ColorDrawable(Color.argb(100, 0, 0, 0)));
                     fbDialogue.setContentView(R.layout.image_fullscreen);
@@ -524,9 +525,8 @@ public class Seller_Photos extends AppCompatActivity {
 
 
 
-                    final ImageView expandedImageView = (ImageView)fbDialogue.findViewById(
-                            R.id.expanded_image);
-                    Glide.with(getApplicationContext()).load(current).diskCacheStrategy(DiskCacheStrategy.DATA).into(expandedImageView);
+                    final ImageView expandedImageView = (ImageView)fbDialogue.findViewById(R.id.expanded_image);
+                    Glide.with(Seller_Photos.this).load(current).diskCacheStrategy(DiskCacheStrategy.DATA).into(expandedImageView);
                     fbDialogue.setCancelable(true);
                     fbDialogue.show();
                 }

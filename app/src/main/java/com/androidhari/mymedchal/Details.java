@@ -1,8 +1,11 @@
 package com.androidhari.mymedchal;
 
+import android.animation.Animator;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -35,6 +38,8 @@ import com.androidhari.mymedchal.SupportFiles.QaFragment;
 import com.androidhari.mymedchal.SupportFiles.ReviewsFragment;
 import com.androidhari.mymedchal.SupportFiles.ViewPagerAdapter;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -71,6 +76,10 @@ public class Details extends AppCompatActivity {
     double lat,lng;
     List<String> images = new ArrayList<>();
     //This is our tablayout
+
+    private Animator currentAnimator;
+
+    private int shortAnimationDuration;
     private TabLayout tabLayout;
     DetailsModel  detailsModel;
     //This is our viewPager
@@ -81,7 +90,7 @@ public class Details extends AppCompatActivity {
 
 
     OverviewFragment overviewFragment;
-
+    ImageView logoimg;
     ReviewsFragment reviewsFragment;
     PhotosFragment photosFragment;
     QaFragment qaFragment;
@@ -110,6 +119,8 @@ public class Details extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+
+        logoimg = (ImageView)findViewById(R.id.imageView2);
         call = (Button) findViewById(R.id.call);
         whatsapp = (Button)findViewById(R.id.whatsapp);
         sms = (Button)findViewById(R.id.sms);
@@ -177,9 +188,10 @@ public class Details extends AppCompatActivity {
 
     }
 
-    private void RatingBindData() {
 
-        mDatabase.orderByChild("key").equalTo(tinyDB.getString("key")).addValueEventListener(new ValueEventListener() {
+    private void RatingBindData() {
+        DatabaseReference mDatabase2 = FirebaseDatabase.getInstance().getReference().child("reviews");
+        mDatabase2.orderByChild("key").equalTo(tinyDB.getString("key")).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 //                Log.e("data2", dataSnapshot.getValue().toString());
@@ -243,8 +255,18 @@ public class Details extends AppCompatActivity {
 
 
                     Log.e("Average", String.valueOf(averagerating));
+                    Log.e("count", String.valueOf(count3));
 
-                    average.setText(String.format("%.1f", averagerating));
+
+
+                    if (Double.isNaN(averagerating)){
+
+                        average.setText("0");
+                    }else {
+
+                        average.setText(String.format("%.1f", averagerating));
+                    }
+
 
                     Log.e("Reviews", String.valueOf(ds.getChildrenCount()));
                 }
@@ -280,6 +302,7 @@ public class Details extends AppCompatActivity {
                     addr.setText(detailsModel.address);
                     chip1.setText(detailsModel.category);
                     chip2.setText(detailsModel.subcategory);
+                    Glide.with(Details.this).load(detailsModel.img).apply(RequestOptions.centerCropTransform()).into(logoimg);
                     contacttxt = detailsModel.contact;
                     whatsapptxt = detailsModel.whatsapp;
                     emailtxt = detailsModel.email;
@@ -288,8 +311,33 @@ public class Details extends AppCompatActivity {
                     Log.e("Name of Busines", detailsModel.getName());
                 }
 
+
+
+
                 parsedata();
 
+                logoimg.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        shortAnimationDuration = getResources().getInteger(
+                                android.R.integer.config_shortAnimTime);
+                        final Dialog fbDialogue = new Dialog(Details.this, android.R.style.Theme_Black_NoTitleBar);
+
+                        fbDialogue.getWindow().setBackgroundDrawable(new ColorDrawable(Color.argb(100, 0, 0, 0)));
+                        fbDialogue.setContentView(R.layout.image_fullscreen);
+
+                        if (currentAnimator != null) {
+                            currentAnimator.cancel();
+                        }
+
+
+
+                        final ImageView expandedImageView = (ImageView)fbDialogue.findViewById(R.id.expanded_image);
+                        Glide.with(Details.this).load(detailsModel.img).diskCacheStrategy(DiskCacheStrategy.DATA).into(expandedImageView);
+                        fbDialogue.setCancelable(true);
+                        fbDialogue.show();
+                    }
+                });
                 call.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -336,59 +384,11 @@ public class Details extends AppCompatActivity {
                     public void onClick(View v) {
 
 
-                        if (selected.equalsIgnoreCase("yes")){
 
-                            for (int i = 0; i < lstArrayList.size(); i++) {
-
-                                if (detailsModel.getName().equalsIgnoreCase(lstArrayList.get(i).getName())) {
-
-                                    lstArrayList.remove(i);
-                                    int img = R.drawable.ic_heart_open;
-
-                                    String key = "fav";
-
-                                    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(Details.this);
-                                    SharedPreferences.Editor editor = sharedPrefs.edit();
-                                    Gson gson = new Gson();
-
-                                    String json = gson.toJson(lstArrayList);
-
-                                    editor.remove(key).commit();
-                                    editor.putString("fav", json);
-                                    editor.commit();
-
-                                    favbtn.setCompoundDrawablesWithIntrinsicBounds(0, img, 0, 0);
-                                    favbtn.setText("Favourite");
-
-                                    selected = "no";
-//                                    Log.e("found",lstArrayList.get(i).getName());
-                                }
-
-                            }
-                        }
-
-                        else if (selected.equalsIgnoreCase("no")){
+                        favbtnfunction();
 
 
 
-                            lstArrayList.add(detailsModel);
-                            String key = "fav";
-
-                            SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(Details.this);
-                            SharedPreferences.Editor editor = sharedPrefs.edit();
-                            Gson gson = new Gson();
-
-                            String json = gson.toJson(lstArrayList);
-
-                            editor.remove(key).commit();
-                            editor.putString("fav", json);
-                            editor.commit();
-
-                            int img = R.drawable.ic_favorite_heart_button;
-
-                            favbtn.setCompoundDrawablesWithIntrinsicBounds(0,img,0,0);
-                            favbtn.setText("Added");
-                        }
 
 
 
@@ -484,6 +484,66 @@ public class Details extends AppCompatActivity {
         });
     }
 
+    private void favbtnfunction() {
+
+
+        if (selected.equalsIgnoreCase("yes")){
+
+            for (int i = 0; i < lstArrayList.size(); i++) {
+
+                if (detailsModel.getName().equalsIgnoreCase(lstArrayList.get(i).getName())) {
+
+                    lstArrayList.remove(i);
+                    int img = R.drawable.ic_heart_open;
+
+                    String key = "fav";
+
+                    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(Details.this);
+                    SharedPreferences.Editor editor = sharedPrefs.edit();
+                    Gson gson = new Gson();
+
+                    String json = gson.toJson(lstArrayList);
+
+                    editor.remove(key).commit();
+                    editor.putString("fav", json);
+                    editor.commit();
+
+                    favbtn.setCompoundDrawablesWithIntrinsicBounds(0, img, 0, 0);
+                    favbtn.setText("Favourite");
+
+                    selected = "no";
+//                                    Log.e("found",lstArrayList.get(i).getName());
+                }
+
+            }
+        }
+
+        else if (selected.equalsIgnoreCase("no")){
+
+
+
+            lstArrayList.add(detailsModel);
+            String key = "fav";
+
+            SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(Details.this);
+            SharedPreferences.Editor editor = sharedPrefs.edit();
+            Gson gson = new Gson();
+
+            String json = gson.toJson(lstArrayList);
+
+            editor.remove(key).commit();
+            editor.putString("fav", json);
+            editor.commit();
+
+            int img = R.drawable.ic_favorite_heart_button;
+
+            favbtn.setCompoundDrawablesWithIntrinsicBounds(0,img,0,0);
+            favbtn.setText("Added");
+
+            selected = "yes";
+        }
+    }
+
     private void parsedata() {
 
 
@@ -530,8 +590,6 @@ public class Details extends AppCompatActivity {
 
     //final ImageView imageView = findViewById(R.id.backdrop);
        // Glide.with(this).load(Cheeses.getRandomCheeseDrawable()).apply(RequestOptions.centerCropTransform()).into(imageView);
-
-
 
 
     private void setupViewPager(ViewPager viewPager)

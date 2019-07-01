@@ -23,13 +23,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
-            <com.androidhari.mymedchal.SupportFiles.SquareImageView
+            <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                card_view:srcCompat="@drawable/add_photo" />
+                card_view:srcCompat="@drawable/add_photo"
+                tools:ignore="VectorDrawableCompat" />
 
             <TextView
                 android:id="@+id/add"

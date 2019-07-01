@@ -54,6 +54,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 
 import Classess.Reviewmodels;
 import Classess.TinyDB;
@@ -74,10 +76,18 @@ public class ReviewsFragment extends Fragment {
     TextView reviewtxt,addimage;
     String imageuploaded = "none";
     ImageView imageView;
+    double getrating;
     private int shortAnimationDuration;
     Animator currentAnimator;
     ProgressDialog pd;
+    Dialog dialog;
+
+    EditText editText;
+
+    RatingBar ratingBar;
     TinyDB tinyDB;
+
+    View parentLayout;
     private static int RESULT_LOAD_IMAGE = 1;
     public ReviewsFragment() {
         // Required empty public constructor
@@ -99,10 +109,12 @@ public class ReviewsFragment extends Fragment {
         mRecycleView = (RecyclerView)v.findViewById(R.id.recyclerview);
         reviewtxt = (TextView)v.findViewById(R.id.review);
 
+         dialog = new Dialog(getContext(),R.style.DialoTheme);
+         parentLayout = dialog.findViewById(R.id.parent);
         reviewtxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Dialog dialog = new Dialog(getContext(),R.style.DialoTheme);
+
 
                 dialog.setContentView(R.layout.writereview);
                 dialog.setTitle("Title...");
@@ -115,8 +127,8 @@ public class ReviewsFragment extends Fragment {
 //
 // ;
                 final float ratingvalue;
-                final RatingBar ratingBar = (RatingBar)dialog.findViewById(R.id.ratingBar);
-                final EditText editText = (EditText)dialog.findViewById(R.id.editText);
+                  ratingBar = (RatingBar)dialog.findViewById(R.id.ratingBar);
+                 editText = (EditText)dialog.findViewById(R.id.editText);
                 imageView = (ImageView)dialog.findViewById(R.id.imageView);
 
                  addimage = (TextView)dialog.findViewById(R.id.add);
@@ -129,12 +141,7 @@ public class ReviewsFragment extends Fragment {
                     Log.e("rating", String.valueOf(ratingBar.getNumStars())+ratingBar.getRating());
                     }
                 });
-                imageView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        fetchimage();
-                    }
-                });
+
                 addimage.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -146,13 +153,13 @@ public class ReviewsFragment extends Fragment {
                     public void onClick(View v) {
 
                         int noofstars = ratingBar.getNumStars();
-                        final float getrating = ratingBar.getRating();
+                         getrating = ratingBar.getRating();
                         Log.e("ratog","Rating: "+getrating+"/"+noofstars);
 
-                        View parentLayout = dialog.findViewById(R.id.parent);
+
                         if (getrating==0.0){
 
-                            Snackbar.make(parentLayout, "Please Select Rating", Snackbar.LENGTH_LONG)
+                            Snackbar.make(getActivity().findViewById(android.R.id.content), "Please Select Rating", Snackbar.LENGTH_LONG)
                                     .setAction("CLOSE", new View.OnClickListener() {
                                         @Override
                                         public void onClick(View view) {
@@ -173,35 +180,21 @@ public class ReviewsFragment extends Fragment {
                         else if (imageuploaded.equalsIgnoreCase("none")) {
 
 
-                            FirebaseDatabase database = FirebaseDatabase.getInstance();
-                            DatabaseReference myRef = database.getReference("reviews");
+                            pd.setMessage("Submitting your Review..");
+                            pd.setCancelable(false);
+                            pd.show();
 
-                            Reviewmodels category = new Reviewmodels();
-                            category.setStars(String.valueOf(getrating));
-                            category.setTimestanp(System.currentTimeMillis());
-                            //category.setTitle("dfdsf");
-                            category.setTitle(editText.getText().toString());
-                            category.setUserid(tinyDB.getString("uid"));
-                            category.setUsername(tinyDB.getString("uname"));
-                            category.setProfilepic(tinyDB.getString("uimage"));
-                            //category.setNameofbusiness("GA Mobiles");
-                            category.setLocation(tinyDB.getString("location"));
-                            category.setKey(tinyDB.getString("key"));
-                            category.setImage(imageuploaded);
-                            myRef.push().setValue(category);
-                            pd.dismiss();
-                            Snackbar.make(parentLayout, "Your Review has been posted", Snackbar.LENGTH_LONG)
-                                    .setAction("CLOSE", new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
 
-                                        }
-                                    })
-                                    .setActionTextColor(getResources().getColor(android.R.color.holo_red_light ))
-                                    .show();
-                            dialog.cancel();
+
+                            submitwithcondotions();
+
+
+
+
                         }
-                         else {
+
+
+                        else {
 
 
 
@@ -248,43 +241,15 @@ public class ReviewsFragment extends Fragment {
                                 public void onComplete(@NonNull Task<Uri> task) {
                                     if (task.isSuccessful()) {
                                         Uri downloadUri = task.getResult();
-                                        Log.e("Status of Upload",task.getResult().toString());
+                                        Log.e("Status of Upload", task.getResult().toString());
                                         imageuploaded = task.getResult().toString();
 
-                                        FirebaseDatabase database = FirebaseDatabase.getInstance();
-                                                DatabaseReference myRef = database.getReference("reviews");
-        Reviewmodels category = new Reviewmodels();
-        category.setStars(String.valueOf(getrating));
-        category.setTimestanp(System.currentTimeMillis());
-        //category.setTitle("dfdsf");
-        category.setTitle(editText.getText().toString());
-        category.setUserid(tinyDB.getString("uid"));
-        category.setUsername(tinyDB.getString("uname"));
-        category.setProfilepic(tinyDB.getString("uimage"));
-        category.setLocation(tinyDB.getString("location"));
-        category.setKey(tinyDB.getString("key"));
-        category.setImage(imageuploaded);
-        myRef.push().setValue(category);
-        pd.dismiss();
-                                        View parentLayout = dialog.findViewById(R.id.parent);
-                                        Snackbar.make(parentLayout, "Your Review has been posted", Snackbar.LENGTH_LONG)
-                                                .setAction("CLOSE", new View.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(View view) {
 
-                                                    }
-                                                })
-                                                .setActionTextColor(getResources().getColor(android.R.color.holo_red_light ))
-                                                .show();
-        dialog.cancel();
-                                    } else {
-                                        pd.dismiss();
-                                        dialog.cancel();
-                                        Toast.makeText(getContext(), "Please Try Again", Toast.LENGTH_SHORT).show();
 
-                                        // Handle failures
-                                        // ...
+                                        submitwithcondotions();
                                     }
+
+
                                 }
                             });
                         }
@@ -339,7 +304,15 @@ public class ReviewsFragment extends Fragment {
             @Override
             protected void onBindViewHolder(NewsViewHolder holder, final int position, final Reviewmodels model) {
                 holder.post_title.setText(model.title);
-                holder.post_desc.setText(model.getAns());
+
+
+//                if ()
+
+                if (!TextUtils.isEmpty(model.getAns())){
+
+                    holder.post_desc.setText("Owner Replied :  " + model.getAns());
+                }
+
                 holder.username.setText(model.getUsername());
                 holder.ratingBar.setRating(Float.parseFloat(String.valueOf(model.getStars())));
                 Glide.with(getContext()).load(model.image).diskCacheStrategy(DiskCacheStrategy.DATA).into(holder.image);
@@ -391,11 +364,141 @@ public class ReviewsFragment extends Fragment {
         return v;
     }
 
-    private void validateandsubmitreview() {
+    private void submitwithcondotions() {
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        final DatabaseReference myRef = database.getReference("reviews");
+
+        myRef.orderByChild("key").equalTo(tinyDB.getString("key")).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+
+                if (dataSnapshot.exists()){
+                    for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+                        String ss3 = postSnapshot.child("userid").getValue().toString();
+                        Log.e("Data", ss3);
+                        final String key2 = postSnapshot.getKey();
+
+                        if (ss3.equalsIgnoreCase(tinyDB.getString("uid"))) {
+
+                            Reviewmodels category = new Reviewmodels();
+
+                            NumberFormat nf = DecimalFormat.getInstance();
+                            nf.setMaximumFractionDigits(0);
+                            String str = nf.format(getrating);
+                            category.setStars(str);
+                            category.setTimestanp(System.currentTimeMillis());
+                            //category.setTitle("dfdsf");
+                            category.setTitle(editText.getText().toString());
+                            category.setUserid(tinyDB.getString("uid"));
+                            category.setUsername(tinyDB.getString("uname"));
+                            category.setProfilepic(tinyDB.getString("uimage"));
+                            //category.setNameofbusiness("GA Mobiles");
+                            category.setLocation(tinyDB.getString("location"));
+                            category.setKey(tinyDB.getString("key"));
+                            category.setImage(imageuploaded);
+                            myRef.child(key2).setValue(category);
+                            pd.dismiss();
+                            Snackbar.make(getActivity().findViewById(android.R.id.content), "Your Review has been posted", Snackbar.LENGTH_LONG)
+                                    .setAction("CLOSE", new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+
+                                        }
+                                    })
+                                    .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
+                                    .show();
+                                dialog.cancel();
+
+                        }
+                        else {
+
+                            Reviewmodels category = new Reviewmodels();
+
+                            NumberFormat nf = DecimalFormat.getInstance();
+                            nf.setMaximumFractionDigits(0);
+                            String str = nf.format(getrating);
+                            category.setStars(str);
+                            category.setTimestanp(System.currentTimeMillis());
+                            //category.setTitle("dfdsf");
+                            category.setTitle(editText.getText().toString());
+                            category.setUserid(tinyDB.getString("uid"));
+                            category.setUsername(tinyDB.getString("uname"));
+                            category.setProfilepic(tinyDB.getString("uimage"));
+                            //category.setNameofbusiness("GA Mobiles");
+                            category.setLocation(tinyDB.getString("location"));
+                            category.setKey(tinyDB.getString("key"));
+                            category.setImage(imageuploaded);
+                            myRef.push().setValue(category);
+                            pd.dismiss();
+                            Snackbar.make(getActivity().findViewById(android.R.id.content), "Your Review has been posted", Snackbar.LENGTH_LONG)
+                                    .setAction("CLOSE", new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+
+                                        }
+                                    })
+                                    .setActionTextColor(getResources().getColor(android.R.color.holo_red_light ))
+                                    .show();
+                            dialog.cancel();
+                        }
+
+                    }
+
+
+                }
+
+
+                else {
+
+
+                    Reviewmodels category = new Reviewmodels();
+
+                    NumberFormat nf = DecimalFormat.getInstance();
+                    nf.setMaximumFractionDigits(0);
+                    String str = nf.format(getrating);
+                    category.setStars(str);
+                    category.setTimestanp(System.currentTimeMillis());
+                    //category.setTitle("dfdsf");
+                    category.setTitle(editText.getText().toString());
+                    category.setUserid(tinyDB.getString("uid"));
+                    category.setUsername(tinyDB.getString("uname"));
+                    category.setProfilepic(tinyDB.getString("uimage"));
+                    //category.setNameofbusiness("GA Mobiles");
+                    category.setLocation(tinyDB.getString("location"));
+                    category.setKey(tinyDB.getString("key"));
+                    category.setImage(imageuploaded);
+                    myRef.push().setValue(category);
+                    pd.dismiss();
+                    Snackbar.make(getActivity().findViewById(android.R.id.content), "Your Review has been posted", Snackbar.LENGTH_LONG)
+                            .setAction("CLOSE", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+
+                                }
+                            })
+                            .setActionTextColor(getResources().getColor(android.R.color.holo_red_light ))
+                            .show();
+                    dialog.cancel();
+
+
+                }
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
 
 
 
     }
+
 
     public static class NewsViewHolder extends RecyclerView.ViewHolder{
 

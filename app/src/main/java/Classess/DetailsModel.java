@@ -6,7 +6,7 @@ package Classess;
 
 public class DetailsModel {
 
-     public String name;
+    public String name;
     public String propname;
     public String contact;
     public String contact2;
@@ -40,6 +40,15 @@ public class DetailsModel {
     public String lat;
     public String lng;
     public String whatsapp;
+
+    public String getTimingsfrom() {
+        return timingsfrom;
+    }
+
+    public void setTimingsfrom(String timingsfrom) {
+        this.timingsfrom = timingsfrom;
+    }
+
     public String timingsfrom;
     public String timingsto;
     public String website;
@@ -248,15 +257,6 @@ public class DetailsModel {
     public void setWhatsapp(String whatsapp) {
         this.whatsapp = whatsapp;
     }
-
-    public String getTimingsfrom() {
-        return timingsfrom;
-    }
-
-    public void setTimingsfrom(String timingsfrom) {
-        timingsfrom = timingsfrom;
-    }
-
 
 
     public String getWebsite() {

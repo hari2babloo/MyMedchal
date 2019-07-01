@@ -84,7 +84,7 @@ public class QaFragment extends Fragment {
                     QAmodels ss = ds.getValue(QAmodels.class);
 
 //                    stars.setText(ss.getStars());
-                    Log.e("reviews", ss.getAns());
+//                    Log.e("reviews", ss.getAns());
                 }
             }
             @Override
@@ -127,7 +127,7 @@ public class QaFragment extends Fragment {
 
                             DatabaseReference myRef = database.getReference("Q&A");
                             QAmodels category = new QAmodels();
-                            category.setAns("none");
+                         //   category.setAns("none");
                             category.setTimestanp(System.currentTimeMillis());
                             category.setUserid(tinyDB.getString("uid"));
                             category.setUsername(tinyDB.getString("uname"));
@@ -169,14 +169,24 @@ public class QaFragment extends Fragment {
             @Override
             protected void onBindViewHolder(NewsViewHolder holder, final int position, final QAmodels model) {
 
-                holder.question.setText(model.getQuestion());
+                holder.question.setText("Question : " +model.getQuestion());
                 holder.username.setText(model.getUsername());
-                holder.answer.setText(model.getAns());
+                if (!TextUtils.isEmpty(model.getAns())){
+
+                    holder.answer.setText("Owner Replied :  " + model.getAns());
+                }
+
+                else {
+                    holder.answer.setText("Waiting for Reply From Owner");
+
+                }
+
+ ///               holder.answer.setText(model.getAns());
 
                 Glide.with(getContext()).load(model.profilepic).diskCacheStrategy(DiskCacheStrategy.DATA).into(holder.usrimg);
 
 //                holder.setImage(getBaseContext(), model.getImage());
-                Log.e("result",model.getAns());
+//                Log.e("result",model.getAns());
 
             }
 

@@ -73,6 +73,19 @@ public class OverviewFragment extends Fragment {
                     services.setText(ss.services);
                     timing.setText(ss.timingsfrom  + "   " +ss.timingsto);
                     email.setText(ss.email);
+
+                    if (ss.website.equalsIgnoreCase("na")){
+
+                        website.setVisibility(View.GONE);
+
+
+                    }else {
+
+                        website.setText(ss.website);
+
+
+                    }
+
                     website.setText(ss.website);
                     workingdays.setText(ss.workindays);
                     addr.setText(ss.address+",\n" +ss.landmark + ",\n" +ss.lane+",\n"+ss.colony);

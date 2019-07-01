@@ -32,8 +32,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="write your question here"
-                android:maxLines="5"
-                android:minLines="3" />
+                android:maxLines="5" />
 
             <TextView
                 android:id="@+id/add"

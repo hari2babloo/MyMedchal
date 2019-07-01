@@ -5,10 +5,9 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION">
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
-    </uses-permission>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <application
         android:name=".MyMedchal"
         android:allowBackup="true"
@@ -17,27 +16,32 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SellerStuff.Seller_Photos"></activity>
+        <activity android:name=".SellerStuff.Seller_Details"></activity>
+        <activity android:name=".Dynamiclinks.ShowDetails">
+           <intent-filter>
+
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="mymedchal.page.link"
+                    android:scheme="https" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".Dynamiclinks.DynamicLinks"></activity>
+        <activity android:name=".SellerStuff.Seller_Photos" />
         <activity android:name=".SellerStuff.Seller_Review" />
         <activity android:name=".SellerStuff.Seller_QA" />
         <activity android:name=".Seller_Dashpage" />
         <activity android:name=".ManageLists" />
         <activity android:name=".MainActivity" />
-        <activity android:name=".GetStarted">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
-        </activity>
-
+        <activity android:name=".GetStarted" />
         <activity
             android:name=".Main2Activity"
             android:label="@string/title_activity_main2"
-            android:theme="@style/AppTheme">
-
-        </activity>
+            android:theme="@style/AppTheme" />
         <activity android:name=".SubCategory" />
         <activity android:name=".BusinessLists" />
         <activity android:name=".SampleDataUpload" />
@@ -45,6 +49,12 @@
         <activity android:name=".Details2" />
         <activity android:name=".SplashScreen" />
         <activity android:name=".Intro">
+            <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
 
         </activity>
         <activity android:name=".Bottom" />
@@ -52,11 +62,31 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Main2Activity" />
-
-
         </activity>
         <activity android:name=".FavList" />
         <activity android:name=".Request" />
+
+        <service
+            android:name=".notification.MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/add_photo" />
+        <!--
+ Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more.
+        -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorAccent" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="@string/app_name" />
     </application>
 
 </manifest>

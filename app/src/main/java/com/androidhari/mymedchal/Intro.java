@@ -1,23 +1,38 @@
 package com.androidhari.mymedchal;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.codemybrainsout.onboarder.AhoyOnboarderActivity;
 import com.codemybrainsout.onboarder.AhoyOnboarderCard;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Intro extends AhoyOnboarderActivity {
 
+
+
+
+ProgressDialog pd;
+    private FirebaseAuth firebaseAuth;
+    FirebaseAuth.AuthStateListener mAuthListener;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        pd = new ProgressDialog(this);
+        
+        
+        checklogin();
 //        setContentView(R.layout.intro);
 
         AhoyOnboarderCard ahoyOnboarderCard1 = new AhoyOnboarderCard("City Guide", "Detailed guides to help you plan your trip.", R.drawable.backpack);
@@ -59,6 +74,34 @@ public class Intro extends AhoyOnboarderActivity {
 
     }
 
+    private void checklogin() {
+
+
+        pd.setMessage("Checking Previous Login Details");
+        pd.setCancelable(false);
+        pd.show();
+
+        firebaseAuth = FirebaseAuth.getInstance();
+
+        mAuthListener = new FirebaseAuth.AuthStateListener(){
+            @Override
+            public  void  onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth){
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                if(user!=null){
+                    Intent intent = new Intent(Intro.this, Main2Activity.class);
+                    startActivity(intent);
+                    finish();
+
+                    pd.dismiss();
+                }
+
+                pd.dismiss();
+            }
+
+
+        };
+    }
+
     @Override
     public void onFinishButtonPressed() {
         startActivity(new Intent(Intro.this,SplashScreen.class));
@@ -68,5 +111,29 @@ public class Intro extends AhoyOnboarderActivity {
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
 
+    }
+
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        firebaseAuth.addAuthStateListener(mAuthListener);
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        firebaseAuth.addAuthStateListener(mAuthListener);
+    }
+
+
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        firebaseAuth.removeAuthStateListener(mAuthListener);
     }
 }

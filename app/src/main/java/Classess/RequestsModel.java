@@ -4,6 +4,10 @@ package Classess;
  * Created by b on 14/5/19.
  */
 
+/**
+ * Created by b on 14/5/19.
+ */
+
 public class RequestsModel {
 
 
@@ -11,8 +15,24 @@ public class RequestsModel {
     String uname;
     String uimage;
     String uphone;
+    String key;
+    String bname;
 
+    public String getBname() {
+        return bname;
+    }
 
+    public void setBname(String bname) {
+        this.bname = bname;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
 
     long timestamp;
     String status;
