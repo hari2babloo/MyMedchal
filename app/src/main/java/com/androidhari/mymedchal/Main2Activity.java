@@ -1,16 +1,26 @@
 package com.androidhari.mymedchal;
 
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -20,6 +30,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
@@ -31,6 +42,11 @@ import android.widget.Toast;
 import com.androidhari.mymedchal.SupportFiles.GridAdapter;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -47,13 +63,22 @@ import com.luseen.spacenavigation.SpaceItem;
 import com.luseen.spacenavigation.SpaceNavigationView;
 import com.luseen.spacenavigation.SpaceOnClickListener;
 import com.luseen.spacenavigation.SpaceOnLongClickListener;
+import com.synnapps.carouselview.CarouselView;
+import com.synnapps.carouselview.ImageClickListener;
+import com.synnapps.carouselview.ImageListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import Classess.CategoryModel;
+import Classess.FeedModel;
 import Classess.LocationsModel;
+import Classess.ManageListModel;
+import Classess.Photosmodel;
 import Classess.Signup;
 import Classess.TinyDB;
 
@@ -63,8 +88,10 @@ public class Main2Activity extends AppCompatActivity
     List<String> items = new ArrayList<String>();
     List<String> categories = new ArrayList<String>();
     List<String> categoriesimg = new ArrayList<String>();
+    ArrayList<CategoryModel> categoryModels = new ArrayList<>();
 
     FirebaseAuth mAuth;
+    private AdapterFish Adapter;
     DatabaseReference ddd;
     DatabaseReference rootRef;
 
@@ -72,11 +99,17 @@ public class Main2Activity extends AppCompatActivity
     String spinnerlocation, datasnapshot;
     ProgressDialog pd;
 
+    RecyclerView  recyclerView;
+    List<String> filterdata= new ArrayList<String>();
+
     GridView grid;
 
     TextView navusername,navmobno;
     ImageView profimage;
     TinyDB tinyDB;
+    CollapsingToolbarLayout collapsingToolbar;
+    private AdView  mAdView,mAdView2;
+    CarouselView carouselView;
 
     SpaceNavigationView spaceNavigationView;
     @Override
@@ -84,20 +117,33 @@ public class Main2Activity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
 
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+//        collapsingToolbar = findViewById(R.id.collapsing_toolbar);
+//        collapsingToolbar.setTitleEnabled(false);
         enablePersistence();
 
 
+        MobileAds.initialize(Main2Activity.this,"ca-app-pub-3574852791589889~6439948019");
 
+
+        mAdView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+
         mAuth = FirebaseAuth.getInstance();
+
+        recyclerView = (RecyclerView)findViewById(R.id.grid);
+        carouselView = (CarouselView) findViewById(R.id.carouselView);
+
+        carousalsetup();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         View hview = navigationView.getHeaderView(0);
@@ -105,8 +151,11 @@ public class Main2Activity extends AppCompatActivity
         navmobno = (TextView)hview.findViewById(R.id.headname2);
         profimage = (ImageView)hview.findViewById(R.id.imageView);
 
+        mAdView2 =  hview.findViewById(R.id.adView2);
+        AdRequest adRequest2 = new AdRequest.Builder().build();
+        mAdView2.loadAd(adRequest2);
 
-        Toast.makeText(getApplicationContext(), "Long press center button to show badge example", Toast.LENGTH_LONG).show();
+       // Toast.makeText(getApplicationContext(), "Long press center button to show badge example", Toast.LENGTH_LONG).show();
         spaceNavigationView = (SpaceNavigationView) findViewById(R.id.space);
         spaceNavigationView.initWithSaveInstanceState(savedInstanceState);
 
@@ -161,7 +210,7 @@ public class Main2Activity extends AppCompatActivity
             }
         });
         tinyDB = new TinyDB(this);
-        grid = (GridView) findViewById(R.id.grid);
+//        grid = (GridView) findViewById(R.id.grid);
 //        items.add("Athvelly");
         pd = new ProgressDialog(this);
         rootRef = FirebaseDatabase.getInstance().getReference();
@@ -169,10 +218,8 @@ public class Main2Activity extends AppCompatActivity
         Log.e("username",tinyDB.getString("uid"));
         Log.e("username",tinyDB.getString("username"));
 
-
         if (TextUtils.isEmpty(tinyDB.getString("uname"))){
         DatabaseReference sss = rootRef.child("users");
-
         Log.e("username","came inside");
 
         sss.orderByKey().equalTo(tinyDB.getString("uid")).addValueEventListener(new ValueEventListener() {
@@ -250,6 +297,109 @@ public class Main2Activity extends AppCompatActivity
 
     }
 
+    private void carousalsetup() {
+
+
+        final DatabaseReference  databaseReference = FirebaseDatabase.getInstance().getReference().child("offers").child("feeds");
+
+
+       databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+           @Override
+           public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+               if (dataSnapshot.exists()){
+                   Log.e("photosdata",dataSnapshot.getKey());
+                   //              Photosmodel ss = dataSnapshot.getValue(Photosmodel.class);
+//                Log.e("reviews", ss.getImgurl());
+
+                   for (DataSnapshot ds : dataSnapshot.getChildren()) {
+
+
+                       Log.e("PhotoKeys",ds.getKey());
+
+
+                       FeedModel ss2 = ds.getValue(FeedModel.class);
+
+                       filterdata.add(ss2.getImage());
+
+
+//                    stars.setText(ss.getStars());
+//                       Log.e("photosname", ss2.getImage());
+
+                   }
+
+                   dispatchInformations(filterdata);
+               }
+
+               else {
+
+                   carouselView.setVisibility(View.GONE);
+               }
+
+           }
+
+           @Override
+           public void onCancelled(@NonNull DatabaseError databaseError) {
+
+           }
+       });
+//        FeedModel feedModel  =new FeedModel();
+//        feedModel.setTitle("Medchal News");
+//        feedModel.setDesc("Description");
+//        feedModel.setTimestamp("Time");
+//        feedModel.setImage("https://www.androidhive.info/wp-content/uploads/2016/05/android-welcome-intro-slider-with-bottom-dots.png");
+//        feedModel.setImaagearray("Yes");
+//        feedModel.setContributer("JIO");
+//        feedModel.setTopic("Topic");
+//        databaseReference.push().setValue(feedModel);
+    }
+
+    public void dispatchInformations(List<String> test) {
+
+        //images = test;
+
+        if (carouselView != null) {
+
+            int imgsize;
+
+            if (filterdata.size()>4){
+
+                imgsize=4;
+            }
+            else {
+
+                imgsize= filterdata.size();
+            }
+
+            carouselView.setImageListener(imageListener);
+            carouselView.setPageCount(imgsize);
+        }
+        Log.e("Received From Fragment", String.valueOf(test));
+
+        carouselView.setImageClickListener(new ImageClickListener() {
+            @Override
+            public void onClick(int position) {
+
+            startActivity(new Intent(Main2Activity.this,Feed.class));
+//                viewPager.setCurrentItem(2,true);
+//                appBarLayout.setExpanded(false);
+                //  nestedScrollView.fullScroll(View.FOCUS_DOWN);
+            }
+        });
+
+
+    }
+    ImageListener imageListener = new ImageListener() {
+        @Override
+        public void setImageForPosition(int position, ImageView imageView) {
+            Glide.with(getApplicationContext())
+                    .load(filterdata.get(position))
+                    .centerCrop()
+                    .placeholder(R.drawable.backpack)
+                    .into(imageView);
+            //      Glide.with(Details.this).load(images.get(position)).diskCacheStrategy(DiskCacheStrategy.DATA).into(imageView);
+        }
+    };
+
     private void getgriddata() {
         ddd = FirebaseDatabase.getInstance().getReference().child("Category");
         ddd.keepSynced(true);
@@ -257,66 +407,81 @@ public class Main2Activity extends AppCompatActivity
         ddd.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-
                 Log.e("Count ", "" + dataSnapshot.toString());
                 datasnapshot = dataSnapshot.toString();
                 categories.clear();
                 categoriesimg.clear();
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
-
-
                     //  String eventID= dataSnapshot.child("Hospitals").getKey();
                     String eventID = ds.getKey();
                     CategoryModel post = ds.getValue(CategoryModel.class);
-                    Log.e("Get Data", ds.getValue().toString());
 
+
+                    categoryModels.add(post);
+                    Log.e("Get Data", ds.getValue().toString());
                     categories.add(post.getName());
                     categoriesimg.add(post.getImg());
                     Log.d("TAG", eventID);
-
-
                 }
-
-
                 Log.d("ARAY", String.valueOf(categoriesimg));
                 Log.e("received", String.valueOf(categories));
 
+
+                Adapter = new AdapterFish(Main2Activity.this, categoryModels);
+                Adapter.setHasStableIds(false);
+                recyclerView.setAdapter(Adapter);
+
+                //mRVFishPrice.getLayoutManager().scrollToPosition(0);
+                recyclerView.setHasFixedSize(false);
+
+                RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(Main2Activity.this, 3);
+                recyclerView.setLayoutManager(mLayoutManager);
+                recyclerView.setNestedScrollingEnabled(false);
+//                DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
+//                        ((GridLayoutManager) mLayoutManager).getOrientation());
+//                recyclerView.addItemDecoration(dividerItemDecoration);
+                recyclerView.addItemDecoration(new DividerItemDecoration(Main2Activity.this,
+                        DividerItemDecoration.HORIZONTAL));
+                recyclerView.addItemDecoration(new DividerItemDecoration(Main2Activity.this,
+                        DividerItemDecoration.VERTICAL));
+
+//                recyclerView.setLayoutManager(new LinearLayoutManager(Main2Activity.this,LinearLayoutManager.VERTICAL,false));
                 bindgriddata();
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
-
         });
-
-
 //        categories.add("hedfaf");
 
     }
 
     private void bindgriddata() {
-        GridAdapter adapter2 = new GridAdapter(this, categories, categoriesimg);
-        grid.setAdapter(adapter2);
 
-        grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
+//
+//        GridAdapter adapter2 = new GridAdapter(this, categories, categoriesimg);
+//        grid.setAdapter(adapter2);
+//
+//        grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view,
+//                                    int position, long id) {
+//
+////                Toast.makeText(Main2Activity.this, categories.get(position), Toast.LENGTH_SHORT).show();
+//
+//                Intent intent = new Intent(Main2Activity.this, SubCategory.class);
+//                tinyDB.putString("Category", categories.get(position));
+//                startActivity(intent);
+//                // startActivity(new Intent(Main2Activity.this,SubCategory.class));
+//                //Toast.makeText(this, "You Clicked at " +categories.get(position), Toast.LENGTH_SHORT).show();
+//
+//            }
+//        });
 
-//                Toast.makeText(Main2Activity.this, categories.get(position), Toast.LENGTH_SHORT).show();
 
-                Intent intent = new Intent(Main2Activity.this, SubCategory.class);
-                tinyDB.putString("Category", categories.get(position));
-                startActivity(intent);
-                // startActivity(new Intent(Main2Activity.this,SubCategory.class));
-                //Toast.makeText(this, "You Clicked at " +categories.get(position), Toast.LENGTH_SHORT).show();
 
-            }
-        });
 
 
         navusername.setText(tinyDB.getString("uname"));
@@ -422,12 +587,31 @@ else {
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
+//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+//        if (drawer.isDrawerOpen(GravityCompat.START)) {
+//            drawer.closeDrawer(GravityCompat.START);
+//        } else {
+//            super.onBackPressed();
+//        }
+
+
+        new AlertDialog.Builder(this)
+                .setIcon(R.mipmap.ic_launcher)
+                .setTitle("Quit MyMedchal?")
+                .setMessage("Do you want to close MyMedchal App?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent homeIntent = new Intent(Intent.ACTION_MAIN);
+                        homeIntent.addCategory( Intent.CATEGORY_HOME );
+                        homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(homeIntent);
+                    }
+
+                })
+                .setNegativeButton("No", null)
+                .show();
     }
 
     @Override
@@ -442,6 +626,8 @@ else {
 
         return true;
     }
+
+
 
 
     @Override
@@ -471,18 +657,26 @@ else {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.profile) {
-            // Handle the camera action
-        } else if (id == R.id.favs) {
+
+         if (id == R.id.favs) {
 
             startActivity(new Intent(Main2Activity.this,FavList.class));
+
+        }
+
+        else if (id==R.id.contact){
+
+             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:" + "8125110147"));
+             intent.putExtra("sms_body", "Hey there, I Like Your App Mymedchal");
+             startActivity(intent);
+
+
 
         }
         else if (id==R.id.add){
 
             startActivity(new Intent(Main2Activity.this,Request.class));
         }
-
         else if (id == R.id.rate) {
 
         } else if (id == R.id.contact) {
@@ -492,8 +686,6 @@ else {
 
         }
 
-
-
         else if (id == R.id.log_out) {
             mAuth.signOut();
             startActivity(new Intent(Main2Activity.this,Intro.class));
@@ -502,5 +694,122 @@ else {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+
     }
+
+
+
+    class AdapterFish extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+        List<CategoryModel> data = Collections.emptyList();
+        int currentPos = 0;
+        private Context context;
+        private LayoutInflater inflater;
+        // create constructor to innitilize context and data sent from MainActivity
+        public AdapterFish(Context context, List<CategoryModel> data) {
+            this.context = context;
+            inflater = LayoutInflater.from(context);
+            this.data = data;
+        }
+
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = inflater.inflate(R.layout.gridviewitem, parent, false);
+            final AdapterFish.MyHolder holder = new AdapterFish.MyHolder(view);
+
+            return holder;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+        @Override
+        public int getItemViewType(int position) {
+            return position;
+        }
+        // Bind data
+
+        @Override
+        public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
+
+            // Get current position of item in recyclerview to bind data and assign values from list
+            final AdapterFish.MyHolder myHolder = (AdapterFish.MyHolder) holder;
+            //   mRVFishPrice.scrollToPosition(position);
+            //    holder.setIsRecyclable(true);
+            final CategoryModel current = data.get(position);
+
+
+            myHolder.text.setText(current.getName());
+            Glide.with(Main2Activity.this).load(current.img).apply(RequestOptions.centerCropTransform()).into(myHolder.img);
+
+
+
+
+            Log.e("recycleritems",data.get(position).getName());
+
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+//                        tinyDB.putString("location",current.getLocation());
+//                        tinyDB.putString("key",current.getKey());
+//                        Log.e("Key",tinyDB.getString("key"));
+//                        Log.e("location",tinyDB.getString("location"));
+
+//                        startActivity(new Intent(this,Seller_Dashpage.class));
+                }
+            });
+
+//                myHolder.edit.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//
+
+//
+//                    }
+//                });
+//
+//                myHolder.view.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//
+//                    }
+//                });
+
+
+        }
+        // return total item from List
+        @Override
+        public int getItemCount() {
+            return data.size();
+        }
+
+
+        class MyHolder extends RecyclerView.ViewHolder {
+            TextView text;
+            ImageView img;
+            // create constructor to get widget reference
+            public MyHolder(View itemView) {
+                super(itemView);
+
+
+
+                text = itemView.findViewById(R.id.text);
+
+                img = itemView.findViewById(R.id.image);
+
+//                view = itemView.findViewById(R.id.view);
+//                edit = itemView.findViewById(R.id.edit);
+
+
+
+
+            }
+
+        }
+
+    }
+
+
+
 }

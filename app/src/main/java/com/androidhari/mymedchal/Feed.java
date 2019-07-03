@@ -3,9 +3,7 @@ package com.androidhari.mymedchal;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,12 +15,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import com.androidhari.mymedchal.SellerStuff.Seller_Photos;
+
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
@@ -38,30 +35,36 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import Classess.FeedModel;
 import Classess.ManageListModel;
 import Classess.TinyDB;
 
-public class ManageLists extends AppCompatActivity {
+public class Feed extends AppCompatActivity {
+
+
 
     Spinner spinner;
     String spinnerlocation, datasnapshot;
-//    List<String> items = new ArrayList<String>();
+    //    List<String> items = new ArrayList<String>();
     RecyclerView mRecycleView;
     LinearLayout linearLayout;
     String key;
     String selecteddate;
-     ProgressDialog pd;
+
+    DatabaseReference databaseReference;
+    ProgressDialog pd;
     TinyDB tinyDB;
     AdView mAdView;
     TextView toolbartitle;
     Toolbar toolbar;
     private AdapterFish Adapter;
-    ArrayList<ManageListModel> manageListModels = new ArrayList<>();
+    ArrayList<FeedModel> manageListModels = new ArrayList<>();
     DatabaseReference rootRef;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.manage_lists);
+        setContentView(R.layout.feed);
         pd = new ProgressDialog(this);
         tinyDB = new TinyDB(this);
         spinner = (Spinner)findViewById(R.id.spinner);
@@ -78,8 +81,8 @@ public class ManageLists extends AppCompatActivity {
         tinyDB = new TinyDB(this);
 
         toolbartitle = (TextView)toolbar.findViewById(R.id.toolbar_title);
-        toolbartitle.setText("Manage My Lists");
-        MobileAds.initialize(ManageLists.this,"ca-app-pub-3574852791589889~6439948019");
+        toolbartitle.setText("Feeds");
+        MobileAds.initialize(Feed.this,"ca-app-pub-3574852791589889~6439948019");
 
 
         mAdView = findViewById(R.id.adView);
@@ -87,12 +90,12 @@ public class ManageLists extends AppCompatActivity {
         mAdView.loadAd(adRequest);
         linearLayout = (LinearLayout)findViewById(R.id.layout);
         linearLayout.setVisibility(View.GONE);
-        rootRef = FirebaseDatabase.getInstance().getReference("ServiceProvider");
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("offers").child("feeds");
         pd.setCancelable(false);
-        pd.setMessage("Getting Your Details");
+        pd.setMessage("Getting Feeds");
         pd.show();
-        DatabaseReference sss = rootRef.child(tinyDB.getString("uid"));
-        sss.addValueEventListener(new ValueEventListener() {
+
+        databaseReference.limitToLast(50).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
@@ -104,25 +107,25 @@ public class ManageLists extends AppCompatActivity {
                         String eventID = ds.getKey();
 
 
-                        ManageListModel manageListModel = ds.getValue(ManageListModel.class);
-                        Log.e(manageListModel.getKey(),manageListModel.getLocation());
+                        FeedModel manageListModel = ds.getValue(FeedModel.class);
+//                        Log.e(manageListModel.getKey(),manageListModel.getLocation());
                         manageListModels.add(manageListModel);
 
                     }
 
                     pd.dismiss();
-                    Adapter = new AdapterFish(ManageLists.this, manageListModels);
+                    Adapter = new Feed.AdapterFish(Feed.this, manageListModels);
                     Adapter.setHasStableIds(false);
                     mRecycleView.setAdapter(Adapter);
 
                     //mRVFishPrice.getLayoutManager().scrollToPosition(0);
                     mRecycleView.setHasFixedSize(false);
-                    mRecycleView.setLayoutManager(new LinearLayoutManager(ManageLists.this,LinearLayoutManager.VERTICAL,false));
+                    mRecycleView.setLayoutManager(new LinearLayoutManager(Feed.this,LinearLayoutManager.VERTICAL,false));
                 }
 
                 else {
                     linearLayout.setVisibility(View.VISIBLE);
-    pd.dismiss();
+                    pd.dismiss();
                 }
 
 
@@ -139,12 +142,12 @@ public class ManageLists extends AppCompatActivity {
 
 
     public class AdapterFish extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-        List<ManageListModel> data = Collections.emptyList();
+        List<FeedModel> data = Collections.emptyList();
         int currentPos = 0;
         private Context context;
         private LayoutInflater inflater;
         // create constructor to innitilize context and data sent from MainActivity
-        public AdapterFish(Context context, List<ManageListModel> data) {
+        public AdapterFish(Context context, List<FeedModel> data) {
             this.context = context;
             inflater = LayoutInflater.from(context);
             this.data = data;
@@ -153,7 +156,7 @@ public class ManageLists extends AppCompatActivity {
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = inflater.inflate(R.layout.managelisttemplate, parent, false);
-            final MyHolder holder = new MyHolder(view);
+            final Feed.AdapterFish.MyHolder holder = new Feed.AdapterFish.MyHolder(view);
 
             return holder;
         }
@@ -172,33 +175,32 @@ public class ManageLists extends AppCompatActivity {
         public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
 
             // Get current position of item in recyclerview to bind data and assign values from list
-            final MyHolder myHolder = (MyHolder) holder;
+            final AdapterFish.MyHolder myHolder = (AdapterFish.MyHolder) holder;
             //   mRVFishPrice.scrollToPosition(position);
             //    holder.setIsRecyclable(true);
-            final ManageListModel current = data.get(position);
+            final FeedModel current = data.get(position);
 
 
 
 
-            Log.e("recycleritems",data.get(position).getLocation());
+//            Log.e("recycleritems",data.get(position).getLocation());
 
-                myHolder.name.setText(current.getBname());
+            myHolder.name.setText(current.getTitle());
+            myHolder.location.setText(current.getLocation());
+            myHolder.subcat.setText(current.getDesc());
+//            String dateString = new SimpleDateFormat("dd/MM/yyyy").format(new Date(current.getTimestamp()));
+//            myHolder.timestamp.setText(dateString);
+            myHolder.imgnext.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+//                    tinyDB.putString("location",current.getLocation());
+//                    tinyDB.putString("key",current.getKey());
+//                    Log.e("Key",tinyDB.getString("key"));
+//                    Log.e("location",tinyDB.getString("location"));
 
-                myHolder.location.setText(current.getLocation());
-                myHolder.subcat.setText(current.getSubcategory());
-            String dateString = new SimpleDateFormat("dd/MM/yyyy").format(new Date(current.getTimestamp()));
-                myHolder.timestamp.setText(dateString);
-                myHolder.imgnext.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        tinyDB.putString("location",current.getLocation());
-                        tinyDB.putString("key",current.getKey());
-                        Log.e("Key",tinyDB.getString("key"));
-                        Log.e("location",tinyDB.getString("location"));
-
-                        startActivity(new Intent(ManageLists.this,Seller_Dashpage.class));
-                    }
-                });
+//                    startActivity(new Intent(Feed.this,Seller_Dashpage.class));
+                }
+            });
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -208,7 +210,7 @@ public class ManageLists extends AppCompatActivity {
                     Log.e("Key",tinyDB.getString("key"));
                     Log.e("location",tinyDB.getString("location"));
 
-                    startActivity(new Intent(ManageLists.this,Seller_Dashpage.class));
+                    startActivity(new Intent(Feed.this,Seller_Dashpage.class));
                 }
             });
 
@@ -281,12 +283,12 @@ public class ManageLists extends AppCompatActivity {
             // Respond to the action bar's Up/Home button
             case android.R.id.home:
                 //handle the home button onClick event here.
-                startActivity(new Intent(ManageLists.this,Main2Activity.class));
+                startActivity(new Intent(Feed.this,Main2Activity.class));
                 return true;
 
             case  R.id.homee :
 
-                startActivity(new Intent(ManageLists.this,Main2Activity.class));
+                startActivity(new Intent(Feed.this,Main2Activity.class));
 
 
         }
@@ -295,4 +297,3 @@ public class ManageLists extends AppCompatActivity {
     }
 
 }
-

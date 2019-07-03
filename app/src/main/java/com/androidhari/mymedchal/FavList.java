@@ -16,7 +16,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.google.firebase.database.DatabaseReference;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -40,23 +45,49 @@ public class FavList extends AppCompatActivity {
     private AdapterFish Adapter;
     RecyclerView mRVFishPrice;
 
+    TextView toolbartitle;
+    AdView mAdView;
     ArrayList<DetailsModel> lstArrayList = new ArrayList<DetailsModel>();
     android.support.v7.widget.Toolbar toolbar;
 
     // private FirebaseRecyclerAdapter<Signup, TaskViewHolder> adapter;
     private FirebaseRecyclerOptions<Signup> options;
 
+    ImageView imageView;
+    TextView textView3;
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fav_list);
+
+
         toolbar = findViewById(R.id.toolbar);
-        mRVFishPrice = (RecyclerView)findViewById(R.id.recycler_view); 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setTitle("");
+
         tinyDB = new TinyDB(this);
+
+        toolbartitle = (TextView)toolbar.findViewById(R.id.toolbar_title);
+        toolbartitle.setText("Favourite List");
+        MobileAds.initialize(FavList.this,"ca-app-pub-3574852791589889~6439948019");
+
+
+        mAdView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+
+        mRVFishPrice = (RecyclerView)findViewById(R.id.recycler_view); 
+
+
+        imageView = (ImageView)findViewById(R.id.imageView3);
+        textView3 = (TextView)findViewById(R.id.textView3);
+
+        imageView.setVisibility(View.GONE);
+        textView3.setVisibility(View.GONE);
         parsedata();
+
 
     }
 
@@ -72,11 +103,16 @@ public class FavList extends AppCompatActivity {
         if (json==null){
 
 
+
         }else {
             Type type = new TypeToken<List<DetailsModel>>() {}.getType();
             lstArrayList = gson.fromJson(json, type);
             if(lstArrayList!=null && !lstArrayList.isEmpty() ){
                 attachtorectcler();
+            }
+            else {
+                textView3.setVisibility(View.VISIBLE);
+                imageView.setVisibility(View.VISIBLE);
             }
         }
 
@@ -100,33 +136,6 @@ public class FavList extends AppCompatActivity {
         mRVFishPrice.setAdapter(Adapter);
     }
 
-    @Override
-    public boolean onPrepareOptionsMenu(final Menu menu) {
-        getMenuInflater().inflate(R.menu.sample_actions, menu);
-
-        return super.onCreateOptionsMenu(menu);
-    }
-
-
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            // Respond to the action bar's Up/Home button
-            case android.R.id.home:
-                //handle the home button onClick event here.
-                startActivity(new Intent(FavList.this,SubCategory.class));
-                return true;
-
-            case  R.id.homee :
-
-                startActivity(new Intent(FavList.this,Main2Activity.class));
-
-
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     public class AdapterFish extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         List<DetailsModel> data = Collections.emptyList();
@@ -182,7 +191,22 @@ public class FavList extends AppCompatActivity {
 
             Log.e("imgurl", String.valueOf(current));
 
-            myHolder.name.setText(current.getName());
+            myHolder.appanme.setText(current.getName());
+            myHolder.address.setText(current.getAddress() + "," +current.getLandmark());
+            myHolder.desc.setText(current.getDescription() );
+            myHolder.timings.setText("Timings : " +current.timingsfrom +"-"+current.timingsto);
+            myHolder.workingdays.setText("Working : " +current.workindays);
+            Glide.with(FavList.this).load(current.img).apply(RequestOptions.centerCropTransform()).into(myHolder.logoimg);
+
+
+            if (current.band.equalsIgnoreCase("na")){
+
+                myHolder.band.setVisibility(View.GONE);
+            }
+            else {
+                myHolder.band.setText(current.band);
+
+            }
 
 
         }
@@ -194,19 +218,53 @@ public class FavList extends AppCompatActivity {
 
 
         class MyHolder extends RecyclerView.ViewHolder {
-
-            TextView name;
-
-            ImageView expresimg, servicename;
+            View mView;
+            TextView appanme,address,desc,timings,workingdays,band;
+            ImageView logoimg;
             // create constructor to get widget reference
             public MyHolder(View itemView) {
                 super(itemView);
+                mView = itemView;
                 //expresimg = itemView.findViewById(R.id.expresimg);
-                servicename = (ImageView)itemView.findViewById(R.id.image);
-                name = (TextView)itemView.findViewById(R.id.statusmsg);
+                appanme = (TextView)mView.findViewById(R.id.statusmsg);
+                address= (TextView)mView.findViewById(R.id.text1);
+                desc = (TextView)mView.findViewById(R.id.subHeadingText);
+                timings = (TextView)mView.findViewById(R.id.timing);
+                workingdays =(TextView)mView.findViewById(R.id.workingdays);
+                logoimg = (ImageView) mView.findViewById(R.id.appImage);
+                band = (TextView) mView.findViewById(R.id.band);
 
             }
         }
 
+    }
+
+
+    @Override
+    public boolean onPrepareOptionsMenu(final Menu menu) {
+        getMenuInflater().inflate(R.menu.sample_actions, menu);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                //handle the home button onClick event here.
+                startActivity(new Intent(FavList.this,Main2Activity.class));
+                return true;
+
+            case  R.id.homee :
+
+                startActivity(new Intent(FavList.this,Main2Activity.class));
+
+
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

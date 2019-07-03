@@ -14,6 +14,15 @@ public class SubCategoryModel
     public String data;
     public String star;
     public String category;
+    public String band;
+
+    public String getBand() {
+        return band;
+    }
+
+    public void setBand(String band) {
+        this.band = band;
+    }
 
     public SubCategoryModel() {
     }

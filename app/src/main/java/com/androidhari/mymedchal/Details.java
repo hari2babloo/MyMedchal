@@ -84,11 +84,8 @@ public class Details extends AppCompatActivity {
     DetailsModel  detailsModel;
     //This is our viewPager
     private ViewPager viewPager;
-
     String selected = "no";
     //Fragments
-
-
     OverviewFragment overviewFragment;
     ImageView logoimg;
     ReviewsFragment reviewsFragment;
@@ -105,6 +102,7 @@ public class Details extends AppCompatActivity {
     ArrayList<DetailsModel> arrayList2 = new ArrayList<>();
     ArrayList<DetailsModel> lstArrayList = new ArrayList<DetailsModel>();;
     TextView busname, addr;
+    TextView toolbartitle;
 
     int[] sampleImages;
     Toolbar toolbar;
@@ -119,6 +117,9 @@ public class Details extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setTitle("");
+        toolbartitle = (TextView)toolbar.findViewById(R.id.toolbar_title);
+
 
         logoimg = (ImageView)findViewById(R.id.imageView2);
         call = (Button) findViewById(R.id.call);
@@ -297,7 +298,7 @@ public class Details extends AppCompatActivity {
                     detailsModel = ds.getValue(DetailsModel.class);
                     detailsModel.setKey(ds.getKey());
 
-
+                    toolbartitle.setText(detailsModel.name);
                     busname.setText(detailsModel.name);
                     addr.setText(detailsModel.address);
                     chip1.setText(detailsModel.category);
@@ -382,20 +383,7 @@ public class Details extends AppCompatActivity {
                 favbtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
-
-
                         favbtnfunction();
-
-
-
-
-
-
-
-
-
-
                     }
                 });
 

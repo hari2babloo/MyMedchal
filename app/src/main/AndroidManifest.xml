@@ -16,10 +16,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SellerStuff.Seller_Details"></activity>
+        <activity android:name=".Feed"></activity>
+        <activity android:name=".Collapsablelayout"></activity>
+        <activity android:name=".SellerStuff.Seller_Details" />
         <activity android:name=".Dynamiclinks.ShowDetails">
-           <intent-filter>
-
+            <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
@@ -30,7 +31,7 @@
                     android:scheme="https" />
             </intent-filter>
         </activity>
-        <activity android:name=".Dynamiclinks.DynamicLinks"></activity>
+        <activity android:name=".Dynamiclinks.DynamicLinks" />
         <activity android:name=".SellerStuff.Seller_Photos" />
         <activity android:name=".SellerStuff.Seller_Review" />
         <activity android:name=".SellerStuff.Seller_QA" />
@@ -50,12 +51,10 @@
         <activity android:name=".SplashScreen" />
         <activity android:name=".Intro">
             <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN" />
 
-            <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
-
         </activity>
         <activity android:name=".Bottom" />
         <activity android:name=".Search">
@@ -74,6 +73,9 @@
             </intent-filter>
         </service>
 
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="@string/admobappid" />
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/add_photo" />

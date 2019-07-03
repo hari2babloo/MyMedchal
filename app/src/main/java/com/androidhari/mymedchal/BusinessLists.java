@@ -12,10 +12,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -32,7 +39,10 @@ public class BusinessLists extends AppCompatActivity {
     RecyclerView mRecycleView;
     private FirebaseRecyclerAdapter<DetailsModel, NewsViewHolder> mPeopleRVAdapter;
     DatabaseReference mDatabase;
+    private AdView mAdView,mAdView2;
     TinyDB tinyDB;
+    TextView toolbartitle;
+    LinearLayout linearLayout;
     android.support.v7.widget.Toolbar toolbar;
     // private FirebaseRecyclerAdapter<Signup, TaskViewHolder> adapter;
     private FirebaseRecyclerOptions<Signup> options;
@@ -43,12 +53,20 @@ public class BusinessLists extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("");
         getSupportActionBar().setHomeButtonEnabled(true);
 
         tinyDB = new TinyDB(this);
-
+        toolbartitle = (TextView)toolbar.findViewById(R.id.toolbar_title);
+        toolbartitle.setText(tinyDB.getString("subcatkey"));
+        MobileAds.initialize(BusinessLists.this,"ca-app-pub-3574852791589889~6439948019");
+        mAdView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
         mDatabase = FirebaseDatabase.getInstance().getReference().child("BusinessLists").child(tinyDB.getString("location"));
         mDatabase.keepSynced(true);
+        linearLayout = (LinearLayout)findViewById(R.id.layout);
+        linearLayout.setVisibility(View.GONE);
         mRecycleView = (RecyclerView) findViewById(R.id.recycler_view);
         mRecycleView.setHasFixedSize(true);
         mRecycleView.setLayoutManager(new LinearLayoutManager(this));
@@ -56,6 +74,18 @@ public class BusinessLists extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Log.e("Count ", "" + dataSnapshot.toString());
+
+                if (!dataSnapshot.exists()){
+
+                    linearLayout.setVisibility(View.VISIBLE);
+
+                }
+
+                else {
+
+
+                }
+
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
 //            //  String eventID= dataSnapshot.child("Hospitals").getKey();
 //            String eventID = String.valueOf(ds.getKey().equalsIgnoreCase("Shoppings"));
@@ -87,10 +117,23 @@ public class BusinessLists extends AppCompatActivity {
             protected void onBindViewHolder(NewsViewHolder holder, final int position, final DetailsModel model) {
 
 
-                holder.setTitle(model.getName());
-                holder.setDesc(model.getCategory());
-//                holder.setImage(getBaseContext(), model.getImage());
-                Log.e("result",model.getName());
+
+                holder.appanme.setText(model.getName());
+                holder.address.setText(model.getAddress() + "," +model.getLandmark());
+                holder.desc.setText(model.getDescription() );
+                holder.timings.setText("Timings : " +model.timingsfrom +"-"+model.timingsto);
+                holder.workingdays.setText("Working : " +model.workindays);
+                Glide.with(BusinessLists.this).load(model.img).apply(RequestOptions.centerCropTransform()).into(holder.logoimg);
+
+
+                if (model.band.equalsIgnoreCase("na")){
+
+                    holder.band.setVisibility(View.GONE);
+                }
+                else {
+                    holder.band.setText(model.band);
+
+                }
                 holder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -125,19 +168,23 @@ public class BusinessLists extends AppCompatActivity {
 //
     public static class NewsViewHolder extends RecyclerView.ViewHolder{
         View mView;
+        TextView appanme,address,desc,timings,workingdays,band;
+        ImageView logoimg;
+
+
         public NewsViewHolder(View itemView){
             super(itemView);
             mView = itemView;
-        }
-        public void setTitle(String title){
-            TextView post_title = (TextView)mView.findViewById(R.id.text1);
-            post_title.setText(title);
-        }
-        public void setDesc(String desc){
-            TextView post_desc = (TextView)mView.findViewById(R.id.statusmsg);
-            post_desc.setText(desc);
-        }
+            appanme = (TextView)mView.findViewById(R.id.statusmsg);
+            address= (TextView)mView.findViewById(R.id.text1);
+            desc = (TextView)mView.findViewById(R.id.subHeadingText);
+            timings = (TextView)mView.findViewById(R.id.timing);
+            workingdays =(TextView)mView.findViewById(R.id.workingdays);
+            logoimg = (ImageView) mView.findViewById(R.id.appImage);
+            band = (TextView) mView.findViewById(R.id.band);
 
+
+        }
     }
     //
 //

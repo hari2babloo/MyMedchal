@@ -37,6 +37,7 @@ dependencies {
     implementation 'com.basgeekball:awesome-validation:4.2'
     implementation 'com.codemybrainsout.onboarding:onboarder:1.0.4'
     implementation 'com.synnapps:carouselview:0.1.5'
+    implementation 'com.google.android.gms:play-services-ads:17.1.1'
     implementation 'com.github.armcha:SpaceNavigationView:1.6.0'
     implementation 'com.github.stfalcon:frescoimageviewer:0.5.0'
     implementation 'com.google.code.gson:gson:2.8.5'

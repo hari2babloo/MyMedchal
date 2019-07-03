@@ -5,17 +5,9 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/profile"
-            android:icon="@drawable/ic_profile"
-            android:title="Profile" />
-        <item
             android:id="@+id/favs"
             android:icon="@drawable/ic_favorite_heart_button"
             android:title="Favourites" />
-        <item
-            android:id="@+id/rate"
-            android:icon="@android:drawable/star_big_on"
-            android:title="Rate App" />
         <item
             android:id="@+id/contact "
             android:icon="@drawable/workingdays"
@@ -28,12 +20,12 @@
                 android:id="@+id/add"
                 android:icon="@drawable/ic_add"
                 android:iconTint="@color/bg"
-                android:title="Add My List" />
+                android:title="Add My Work" />
             <item
                 android:id="@+id/manage"
                 android:icon="@drawable/ic_add"
                 android:iconTint="@color/bg"
-                android:title="Manage My Lists" />
+                android:title="Manage My Works" />
             <item
                 android:id="@+id/log_out"
                 android:icon="@drawable/ic_logout"

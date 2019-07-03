@@ -6,22 +6,42 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:fitsSystemWindows="true"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.androidhari.mymedchal.Main2Activity"
     tools:showIn="@layout/app_bar_main2">
 
-    <GridView
+
+
+
+
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/grid"
 
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:numColumns="3"
-
+        android:layout_height="wrap_content"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_marginBottom="80dp"
-        android:stretchMode="columnWidth" />
 
+        android:gravity="center"/>
+        <!--app:layout_behavior="@string/appbar_scrolling_view_behavior"-->
+
+
+        <!--android:numColumns="3"-->
+        <!--android:stretchMode="columnWidth" />-->
+
+
+    <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/adView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        ads:adSize="BANNER"
+        ads:adUnitId="ca-app-pub-3574852791589889/2054405474"
+        ads:layout_anchor="@+id/grid"
+        ads:layout_anchorGravity="bottom|center"></com.google.android.gms.ads.AdView>
 
     <com.luseen.spacenavigation.SpaceNavigationView
         android:id="@+id/space"
@@ -29,11 +49,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="bottom"
-        app:active_item_color="@color/colorAccent"
-        app:centre_button_color="@color/centre_button_color"
-        app:inactive_item_color="@color/white"
-        app:space_background_color="@color/colorPrimary"
+        android:background="#41c300"
+        app:active_item_color="#FFFFFF"
+        app:centre_button_color="#41c300"
         app:centre_button_icon="@drawable/ic_search"
-         />
+        app:inactive_item_color="@color/white"
+        app:space_background_color="#c7006e" />
 
 </android.support.design.widget.CoordinatorLayout>
