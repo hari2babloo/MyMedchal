@@ -6,17 +6,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
@@ -39,18 +33,15 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.androidhari.mymedchal.SupportFiles.GridAdapter;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -58,7 +49,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.gson.Gson;
 import com.luseen.spacenavigation.SpaceItem;
 import com.luseen.spacenavigation.SpaceNavigationView;
 import com.luseen.spacenavigation.SpaceOnClickListener;
@@ -67,18 +57,13 @@ import com.synnapps.carouselview.CarouselView;
 import com.synnapps.carouselview.ImageClickListener;
 import com.synnapps.carouselview.ImageListener;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 import Classess.CategoryModel;
 import Classess.FeedModel;
 import Classess.LocationsModel;
-import Classess.ManageListModel;
-import Classess.Photosmodel;
 import Classess.Signup;
 import Classess.TinyDB;
 
@@ -158,9 +143,12 @@ public class Main2Activity extends AppCompatActivity
        // Toast.makeText(getApplicationContext(), "Long press center button to show badge example", Toast.LENGTH_LONG).show();
         spaceNavigationView = (SpaceNavigationView) findViewById(R.id.space);
         spaceNavigationView.initWithSaveInstanceState(savedInstanceState);
+        spaceNavigationView.addSpaceItem(new SpaceItem("Feeds", R.drawable.ic_newspaper));
 
-        spaceNavigationView.addSpaceItem(new SpaceItem("SEARCH", R.drawable.ic_placeholder));
         spaceNavigationView.addSpaceItem(new SpaceItem("HOME", R.drawable.ic_favorite_heart_button));
+        spaceNavigationView.addSpaceItem(new SpaceItem("add",R.drawable.ic_add_button_inside_black_circle));
+        spaceNavigationView.addSpaceItem(new SpaceItem("manage",R.drawable.ic_meeting));
+
         spaceNavigationView.shouldShowFullBadgeText(true);
         spaceNavigationView.setCentreButtonIconColorFilterEnabled(false);
         spaceNavigationView.showIconOnly();
@@ -183,6 +171,25 @@ public class Main2Activity extends AppCompatActivity
                     startActivity(new Intent(Main2Activity.this,FavList.class));
 
                 }
+                else
+                if (itemName.equalsIgnoreCase("add")){
+
+                    startActivity(new Intent(Main2Activity.this,Request.class));
+
+                }
+                else
+                if (itemName.equalsIgnoreCase("manage")){
+
+                    startActivity(new Intent(Main2Activity.this,ManageLists.class));
+
+                }
+                else
+                if (itemName.equalsIgnoreCase("Feeds")){
+
+                    startActivity(new Intent(Main2Activity.this,Feed.class));
+
+                }
+
             }
 
             @Override
@@ -252,9 +259,6 @@ public class Main2Activity extends AppCompatActivity
     });
 
 }
-
-
-
 
     pd.setCancelable(false);
     pd.setMessage("Getting Locations");
@@ -434,7 +438,7 @@ public class Main2Activity extends AppCompatActivity
                 //mRVFishPrice.getLayoutManager().scrollToPosition(0);
                 recyclerView.setHasFixedSize(false);
 
-                RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(Main2Activity.this, 3);
+                RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(Main2Activity.this, 4);
                 recyclerView.setLayoutManager(mLayoutManager);
                 recyclerView.setNestedScrollingEnabled(false);
 //                DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
@@ -751,6 +755,10 @@ else {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
+                Intent intent = new Intent(Main2Activity.this, SubCategory.class);
+                tinyDB.putString("Category", categories.get(position));
+                startActivity(intent);
 //                        tinyDB.putString("location",current.getLocation());
 //                        tinyDB.putString("key",current.getKey());
 //                        Log.e("Key",tinyDB.getString("key"));
@@ -796,7 +804,7 @@ else {
 
                 text = itemView.findViewById(R.id.text);
 
-                img = itemView.findViewById(R.id.image);
+                img = itemView.findViewById(R.id.imageView);
 
 //                view = itemView.findViewById(R.id.view);
 //                edit = itemView.findViewById(R.id.edit);

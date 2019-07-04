@@ -14,13 +14,11 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
-import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -33,14 +31,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.androidhari.mymedchal.Details;
 import com.androidhari.mymedchal.R;
-import com.androidhari.mymedchal.SupportFiles.PhotosFragment;
 import com.androidhari.mymedchal.SupportFiles.ScalingUtilities;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -63,9 +58,6 @@ import java.util.List;
 
 import Classess.Photosmodel;
 import Classess.TinyDB;
-
-import static android.app.Activity.RESULT_OK;
-
 
 
 public class Seller_Photos extends AppCompatActivity {
@@ -547,7 +539,7 @@ public class Seller_Photos extends AppCompatActivity {
             public MyHolder(View itemView) {
                 super(itemView);
                 //expresimg = itemView.findViewById(R.id.expresimg);
-                servicename = (ImageView)itemView.findViewById(R.id.image);
+                servicename = (ImageView)itemView.findViewById(R.id.imageView);
 
 
             }

@@ -86,7 +86,7 @@ public class PhotosFragment extends Fragment {
     final ArrayList<String> dd = new ArrayList<>();
 
 
-    private Animator currentAnimator;
+
 
     // The system "short" animation time duration, in milliseconds. This
     // duration is ideal for subtle animations or animations that occur
@@ -97,6 +97,7 @@ public class PhotosFragment extends Fragment {
     TinyDB  tinyDB;
     ProgressDialog pd;
     private int shortAnimationDuration;
+    private Animator currentAnimator;
     public PhotosFragment() {
         // Required empty public constructor
     }
@@ -547,7 +548,7 @@ public class PhotosFragment extends Fragment {
         ImageView imageView;
         public NewsViewHolder(View itemView){
             super(itemView);
-            imageView  = (ImageView) itemView.findViewById(R.id.image);
+            imageView  = (ImageView) itemView.findViewById(R.id.imageView);
 //            mView = itemView;
         }
 
@@ -657,7 +658,7 @@ public class PhotosFragment extends Fragment {
             public MyHolder(View itemView) {
                 super(itemView);
                 //expresimg = itemView.findViewById(R.id.expresimg);
-                  servicename = (ImageView)itemView.findViewById(R.id.image);
+                  servicename = (ImageView)itemView.findViewById(R.id.imageView);
 
 
             }

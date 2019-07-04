@@ -73,7 +73,7 @@
                 android:textStyle="normal" />
 
             <com.androidhari.mymedchal.SupportFiles.TouchImageView
-                android:id="@+id/image"
+                android:id="@+id/imageView"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

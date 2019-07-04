@@ -16,8 +16,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Feed"></activity>
-        <activity android:name=".Collapsablelayout"></activity>
+        <activity android:name=".FeedDetails"></activity>
+        <activity android:name=".Feed" />
+        <activity android:name=".Collapsablelayout" />
         <activity android:name=".SellerStuff.Seller_Details" />
         <activity android:name=".Dynamiclinks.ShowDetails">
             <intent-filter>

@@ -6,21 +6,10 @@ import android.os.Bundle;
 import android.animation.Animator;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
-import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -31,39 +20,23 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androidhari.mymedchal.R;
-import com.androidhari.mymedchal.SupportFiles.ReviewsFragment;
-import com.androidhari.mymedchal.SupportFiles.ScalingUtilities;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.google.android.gms.tasks.Continuation;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 
 import Classess.Reviewmodels;
 import Classess.TinyDB;
-
-import static android.app.Activity.RESULT_OK;
 
 public class Seller_Review extends AppCompatActivity {
 
@@ -248,7 +221,7 @@ public class Seller_Review extends AppCompatActivity {
             post_desc = (TextView)itemView.findViewById(R.id.desc);
             username = (TextView)itemView.findViewById(R.id.username);
             usrimg  = (ImageView)itemView.findViewById(R.id.usrimg);
-            image  = (ImageView)itemView.findViewById(R.id.image);
+            image  = (ImageView)itemView.findViewById(R.id.imageView);
             ratingBar = (RatingBar)itemView.findViewById(R.id.stars);
             reply = (TextView)itemView.findViewById(R.id.reply);
 //            mView = itemView;

@@ -514,7 +514,7 @@ public class ReviewsFragment extends Fragment {
              post_desc = (TextView)itemView.findViewById(R.id.desc);
             username = (TextView)itemView.findViewById(R.id.username);
             usrimg  = (ImageView)itemView.findViewById(R.id.usrimg);
-            image  = (ImageView)itemView.findViewById(R.id.image);
+            image  = (ImageView)itemView.findViewById(R.id.imageView);
             ratingBar = (RatingBar)itemView.findViewById(R.id.stars);
 
 //            mView = itemView;
